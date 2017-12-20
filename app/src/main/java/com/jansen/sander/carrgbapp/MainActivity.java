@@ -3,7 +3,10 @@ package com.jansen.sander.carrgbapp;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -30,6 +33,8 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     protected String mac_arduino;
+
+    protected boolean connected = false;
 
     protected int COLOR = 0;
     protected int COLOR_DELAY = 1;
@@ -200,6 +205,11 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mac_arduino  = sharedPref.getString(SettingsActivity.MAC_ARDUINO, "98:D3:32:11:02:9D");
 
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        this.registerReceiver(mReceiver, filter);
         try {
             init();
         } catch (IOException e) {
@@ -218,6 +228,52 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+
+            }
+            else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+            //Device is now connected
+                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connected", Snackbar.LENGTH_LONG);
+                mySnackbar.show();
+            }
+            else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+            //Done searching
+            }
+            else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
+           //Device is about to disconnect
+            }
+            else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+                connected = false;
+                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Disconnected... Reconnecting...", Snackbar.LENGTH_LONG);
+                mySnackbar.show();
+                new Thread(new Runnable() {
+                    public void run() {
+                        try {
+                            while (!connected){
+                                if (connected){
+                                    Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Reconnected!", Snackbar.LENGTH_LONG);
+                                    mySnackbar.show();
+                                    break;
+                                } else {
+                                    init();
+                                    Thread.sleep(3000);
+                                }
+                            }
+                        } catch (IOException | InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
+            }
+        }
+    };
 
     protected FloatingActionButton.OnClickListener fabListener = new FloatingActionButton.OnClickListener(){
 
@@ -351,8 +407,8 @@ public class MainActivity extends AppCompatActivity {
 
         new Thread(new Runnable() {
             public void run() {
-                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connecting...", Snackbar.LENGTH_INDEFINITE);
-                mySnackbar.show();
+                Snackbar mySnackbar;// = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connecting...", Snackbar.LENGTH_INDEFINITE);
+                //mySnackbar.show();
                 boolean isPaired = false;
                 BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -375,11 +431,11 @@ public class MainActivity extends AppCompatActivity {
                                         socket.connect();
                                         outputStream = socket.getOutputStream();
                                         inStream = socket.getInputStream();
+                                        connected = true;
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-                                    mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connected", Snackbar.LENGTH_LONG);
-                                    mySnackbar.show();
+
                                     isPaired = true;
                                     break;
                                 }
