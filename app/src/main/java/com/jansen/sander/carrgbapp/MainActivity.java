@@ -314,13 +314,14 @@ public class MainActivity extends AppCompatActivity {
             data = "{\"ir_val\":"+ ir_command +"}";
         }
         write(data);
-        Log.e("test", data);
     }
 
     private void init() throws IOException {
 
         new Thread(new Runnable() {
             public void run() {
+                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connecting...", Snackbar.LENGTH_INDEFINITE);
+                mySnackbar.show();
                 boolean isPaired = false;
                 BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -346,19 +347,18 @@ public class MainActivity extends AppCompatActivity {
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-                                    Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connected", Snackbar.LENGTH_LONG);
+                                    mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connected", Snackbar.LENGTH_LONG);
                                     mySnackbar.show();
                                     isPaired = true;
-                                    Log.e("Paired?:", "value"+isPaired);
                                     break;
                                 }
                             }
                         }
                         if(!isPaired){
-                            Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Your device is not yet paired or the MAC-address is wrong in the settings.", Snackbar.LENGTH_LONG);
+                            mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Your device is not yet paired or the MAC-address is wrong in the settings.", Snackbar.LENGTH_LONG);
                             mySnackbar.show();
+                            Log.e("error", "No appropriate paired devices.");
                         }
-                        Log.e("error", "No appropriate paired devices.");
                     } else {
                         Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                         startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
@@ -373,6 +373,7 @@ public class MainActivity extends AppCompatActivity {
     public void write(String s) throws IOException {
         try {
             if (outputStream != null) {
+                Log.v("Data", data);
                 outputStream.write(s.getBytes());
             } else{
                 Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Your device is probably not paired or connected", Snackbar.LENGTH_LONG);
