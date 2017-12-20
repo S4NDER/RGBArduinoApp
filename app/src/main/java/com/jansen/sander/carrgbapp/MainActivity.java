@@ -214,6 +214,11 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mac_arduino  = sharedPref.getString(SettingsActivity.MAC_ARDUINO, "98:D3:32:11:02:9D");
 
+        try {
+            init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
         filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
@@ -559,6 +564,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
+
+        if (id == R.id.action_load_color) {
+            startActivity(new Intent(this, ColorBrowsingActivity.class));
+            return true;
+        }
         if (id == R.id.action_reconnect) {
             try {
                 init();
@@ -569,16 +579,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-
-    protected void deleteColor(){
-
-    }
-
-    protected void getStoredColors(){
-
     }
 
     protected Boolean saveNewColor(){
@@ -610,34 +610,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
-                try {
-                    new GetAllSavedColorsTask().execute((Void)null);
-                    //new SaveNewColorTask(new CustomColor(red, green, blue)).execute((Void)null);
 
-                } catch (Exception e){
-                    Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Could not save color", Snackbar.LENGTH_LONG);
-                    mySnackbar.show();
-                }
             } else {
                 Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Could not save color", Snackbar.LENGTH_LONG);
                 mySnackbar.show();
             }
         }
     }
-
-    public class GetAllSavedColorsTask extends AsyncTask<Void, Void, List<CustomColor>>{
-        private List<CustomColor> allSavedColors = new ArrayList<CustomColor>();
-
-        @Override
-        protected List<CustomColor> doInBackground(Void... voids) {
-            allSavedColors = AppDatabase.getInstance(getApplicationContext()).color_db_api()
-                    .getStoredColors();
-
-            for (CustomColor colorX : allSavedColors){
-                Log.v("Color", "RGB: " + colorX.getRed() + ", " + colorX.getGreen() + ", " +  colorX.getBlue() + "   id: " + colorX.getCid());
-            }
-
-            return allSavedColors;
-        }
-    };
 }

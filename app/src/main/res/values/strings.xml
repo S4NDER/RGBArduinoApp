@@ -80,4 +80,6 @@
     <string name="pref_title_MAC_Arduino">MAC Bluetooth Arduino</string>
     <string name="pref_title_mac">MAC Address</string>
     <string name="action_reconnect">Reconnect</string>
+    <string name="title_activity_color_browsing">ColorBrowsingActivity</string>
+    <string name="action_load_saved_colors">Load saved colors</string>
 </resources>
