@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.preference.PreferenceManager;
@@ -25,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -228,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -285,7 +287,6 @@ public class MainActivity extends AppCompatActivity {
     };
 
     protected FloatingActionButton.OnClickListener fabListener = new FloatingActionButton.OnClickListener(){
-
         @Override
         public void onClick(View v) {
 
@@ -542,5 +543,43 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void saveNewColor(){
+
+    }
+
+    protected void deleteColor(){
+
+    }
+
+    protected void getStoredColors(){
+
+    }
+
+    public class AddShameTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final Shame newShame;
+
+        AddShameTask(Shame newShame) {
+            this.newShame = newShame;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            AppDatabase.getInstance(getApplicationContext())
+                    .shameDao().insertAll(newShame);
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success) {
+                finish();
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "Could not add shame", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
