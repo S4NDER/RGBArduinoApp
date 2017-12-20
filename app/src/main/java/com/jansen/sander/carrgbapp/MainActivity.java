@@ -168,15 +168,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    init();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+
+        try {
+            init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -321,45 +318,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() throws IOException {
-        boolean isPaired = false;
-        BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        if (blueAdapter != null) {
-            if (blueAdapter.isEnabled()) {
-                Set<BluetoothDevice> pairedDevices = blueAdapter.getBondedDevices();
+        new Thread(new Runnable() {
+            public void run() {
+                boolean isPaired = false;
+                BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
 
-                if (pairedDevices.size() > 0) {
-                    // There are paired devices. Get the name and address of each paired device.
-                    for (BluetoothDevice device : pairedDevices) {
-                        String deviceName = device.getName();
-                        String deviceHardwareAddress = device.getAddress(); // MAC address
-                        Log.e("mac", deviceHardwareAddress);
-                        if(deviceHardwareAddress.equalsIgnoreCase(mac_arduino)){
-                            Log.e("Bluetooth:", "Should be connected");
-                            ParcelUuid[] uuids = device.getUuids();
-                            BluetoothSocket socket = device.createRfcommSocketToServiceRecord(uuids[0].getUuid());
-                            socket.connect();
-                            outputStream = socket.getOutputStream();
-                            inStream = socket.getInputStream();
-                            Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connected", Snackbar.LENGTH_LONG);
-                            mySnackbar.show();
-                            isPaired = true;
-                            Log.e("Paired?:", "value"+isPaired);
-                            break;
+                if (blueAdapter != null) {
+                    if (blueAdapter.isEnabled()) {
+                        Set<BluetoothDevice> pairedDevices = blueAdapter.getBondedDevices();
+
+                        if (pairedDevices.size() > 0) {
+                            // There are paired devices. Get the name and address of each paired device.
+                            for (BluetoothDevice device : pairedDevices) {
+                                String deviceName = device.getName();
+                                String deviceHardwareAddress = device.getAddress(); // MAC address
+                                Log.e("mac", deviceHardwareAddress);
+                                if(deviceHardwareAddress.equalsIgnoreCase(mac_arduino)){
+                                    Log.e("Bluetooth:", "Should be connected");
+                                    ParcelUuid[] uuids = device.getUuids();
+                                    BluetoothSocket socket = null;
+                                    try {
+                                        socket = device.createRfcommSocketToServiceRecord(uuids[0].getUuid());
+                                        socket.connect();
+                                        outputStream = socket.getOutputStream();
+                                        inStream = socket.getInputStream();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connected", Snackbar.LENGTH_LONG);
+                                    mySnackbar.show();
+                                    isPaired = true;
+                                    Log.e("Paired?:", "value"+isPaired);
+                                    break;
+                                }
+                            }
                         }
+                        if(!isPaired){
+                            Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Your device is not yet paired or the MAC-address is wrong in the settings.", Snackbar.LENGTH_LONG);
+                            mySnackbar.show();
+                        }
+                        Log.e("error", "No appropriate paired devices.");
+                    } else {
+                        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                        startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+                        Log.e("error", "Bluetooth is disabled.");
                     }
                 }
-                if(!isPaired){
-                    Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Your device is not yet paired or the MAC-address is wrong in the settings.", Snackbar.LENGTH_LONG);
-                    mySnackbar.show();
-                }
-                Log.e("error", "No appropriate paired devices.");
-            } else {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-                Log.e("error", "Bluetooth is disabled.");
+
             }
-        }
+        }).start();
     }
 
     public void write(String s) throws IOException {
