@@ -86,14 +86,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        mac_arduino  = sharedPref.getString(SettingsActivity.MAC_ARDUINO, "98:D3:32:11:02:9D");
 
         new Thread(new Runnable() {
             public void run() {
@@ -167,7 +159,14 @@ public class MainActivity extends AppCompatActivity {
                 fabOFF.setImageBitmap(textAsBitmap("OFF", 40, Color.WHITE));
             }
         }).start();
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        mac_arduino  = sharedPref.getString(SettingsActivity.MAC_ARDUINO, "98:D3:32:11:02:9D");
 
         try {
             init();
