@@ -1,13 +1,14 @@
 package com.jansen.sander.carrgbapp;
 
 import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
 /**
  * Created by Sander on 20/12/2017.
  */
-
-public class Color {
+@Entity
+public class CustomColor {
     @PrimaryKey(autoGenerate = true)
     private int cid;
 
@@ -19,9 +20,6 @@ public class Color {
 
     @ColumnInfo(name = "rgb_blue")
     private int blue;
-
-    @ColumnInfo(name = "rgb_note")
-    private String note;
 
     public int getCid() {
         return cid;
@@ -39,15 +37,11 @@ public class Color {
         return blue;
     }
 
-    public String getNote() {
-        return note;
-    }
-
     public void setCid(int cid) {
         this.cid = cid;
     }
 
-    public Color(int red, int green, int blue){
+    public CustomColor(int red, int green, int blue){
         this.red = red;
         this.green = green;
         this.blue = blue;

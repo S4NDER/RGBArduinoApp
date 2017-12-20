@@ -5,7 +5,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Sander on 20/12/2017.
@@ -15,11 +15,14 @@ import java.util.ArrayList;
 public interface Color_Db_API {
 
     @Insert
-    void insertAllColors(Color...colors);
+    void insertAllColors(CustomColor...customColors);
 
     @Delete
-    void delete(Color color);
+    void delete(CustomColor customColor);
 
-    @Query("SELECT * FROM color")
-    ArrayList<Color> getStoredColors();
+    @Query("SELECT * FROM customcolor")
+    List<CustomColor> getStoredColors();
+
+    @Query("SELECT * FROM customcolor WHERE cid IN (:customColorIds)")
+    List<CustomColor> loadAllByIds(int[] customColorIds);
 }

@@ -31,6 +31,8 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     protected String ir_command="";
     protected SeekBar seekRed, seekGreen, seekBlue;
     private final static int REQUEST_ENABLE_BT = 1;
+
+    IntentFilter filter = new IntentFilter();
 
     private static final String IR_BRIGHT_UP  = "0xF700FF";
     private static final String IR_BRIGHT_DOWN = "0xF7807F";
@@ -196,6 +200,9 @@ public class MainActivity extends AppCompatActivity {
                 fabSTROBE.setOnClickListener(fabListener);
                 fabFADE.setOnClickListener(fabListener);
                 fabSMOOTH.setOnClickListener(fabListener);
+
+                fabColor.setOnLongClickListener(longClickListener);
+                fabColor.setOnClickListener(fabListener);
             }
         }).start();
     }
@@ -207,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mac_arduino  = sharedPref.getString(SettingsActivity.MAC_ARDUINO, "98:D3:32:11:02:9D");
 
-        IntentFilter filter = new IntentFilter();
+
         filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
         filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
         filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
@@ -217,6 +224,18 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(mReceiver, filter);
     }
 
     @Override
@@ -277,11 +296,14 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    protected  FloatingActionButton.OnLongClickListener lstnr = new FloatingActionButton.OnLongClickListener(){
+    protected  FloatingActionButton.OnLongClickListener longClickListener = new FloatingActionButton.OnLongClickListener(){
 
 
         @Override
         public boolean onLongClick(View v) {
+            if (v.getId() == findViewById(R.id.fabColor).getId()){
+                saveNewColor();
+            }
             return false;
         }
     };
@@ -289,7 +311,11 @@ public class MainActivity extends AppCompatActivity {
     protected FloatingActionButton.OnClickListener fabListener = new FloatingActionButton.OnClickListener(){
         @Override
         public void onClick(View v) {
-
+            if(v.getId() == findViewById(R.id.fabColor).getId()){
+                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Long press to save custom color", Snackbar.LENGTH_LONG);
+                mySnackbar.show();
+                return;
+            }
             if(v.getId() == findViewById(R.id.fabBR_UP).getId()) {
                 ir_command = IR_BRIGHT_UP;
             }
@@ -545,9 +571,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected void saveNewColor(){
 
-    }
 
     protected void deleteColor(){
 
@@ -557,29 +581,63 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public class AddShameTask extends AsyncTask<Void, Void, Boolean> {
+    protected Boolean saveNewColor(){
+        try {
+            new SaveNewColorTask(new CustomColor(red, green, blue)).execute((Void)null);
+            return true;
+        } catch (Exception e){
+            Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Could not save color", Snackbar.LENGTH_LONG);
+            mySnackbar.show();
+        }
+        return false;
+    }
 
-        private final Shame newShame;
+    public class SaveNewColorTask extends AsyncTask<Void, Void, Boolean> {
+        private final CustomColor newColor;
 
-        AddShameTask(Shame newShame) {
-            this.newShame = newShame;
+        SaveNewColorTask(CustomColor newColor){
+            this.newColor = newColor;
+            Log.e("Color", "RGB: " + newColor.getRed()+","+ newColor.getGreen()+","+newColor.getBlue()+ "   id:" + newColor.getCid() );
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-            AppDatabase.getInstance(getApplicationContext())
-                    .shameDao().insertAll(newShame);
+        protected Boolean doInBackground(Void... voids) {
+            AppDatabase.getInstance(getApplicationContext()).color_db_api()
+                    .insertAllColors(newColor);
             return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
-                finish();
+                try {
+                    new GetAllSavedColorsTask().execute((Void)null);
+                    //new SaveNewColorTask(new CustomColor(red, green, blue)).execute((Void)null);
+
+                } catch (Exception e){
+                    Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Could not save color", Snackbar.LENGTH_LONG);
+                    mySnackbar.show();
+                }
             } else {
-                Toast.makeText(getApplicationContext(),
-                        "Could not add shame", Toast.LENGTH_SHORT).show();
+                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Could not save color", Snackbar.LENGTH_LONG);
+                mySnackbar.show();
             }
         }
     }
+
+    public class GetAllSavedColorsTask extends AsyncTask<Void, Void, List<CustomColor>>{
+        private List<CustomColor> allSavedColors = new ArrayList<CustomColor>();
+
+        @Override
+        protected List<CustomColor> doInBackground(Void... voids) {
+            allSavedColors = AppDatabase.getInstance(getApplicationContext()).color_db_api()
+                    .getStoredColors();
+
+            for (CustomColor colorX : allSavedColors){
+                Log.v("Color", "RGB: " + colorX.getRed() + ", " + colorX.getGreen() + ", " +  colorX.getBlue() + "   id: " + colorX.getCid());
+            }
+
+            return allSavedColors;
+        }
+    };
 }
