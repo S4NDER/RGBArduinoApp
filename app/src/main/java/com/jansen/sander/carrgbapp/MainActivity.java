@@ -95,76 +95,88 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mac_arduino  = sharedPref.getString(SettingsActivity.MAC_ARDUINO, "98:D3:32:11:02:9D");
 
-        try {
-            init();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        seekRed = findViewById(R.id.slideRed);
-        seekGreen = findViewById(R.id.slideGreen);
-        seekBlue = findViewById(R.id.slideBlue);
+        new Thread(new Runnable() {
+            public void run() {
+                seekRed = findViewById(R.id.slideRed);
+                seekGreen = findViewById(R.id.slideGreen);
+                seekBlue = findViewById(R.id.slideBlue);
 
-        seekRed.setOnSeekBarChangeListener(slideListener);
-        seekGreen.setOnSeekBarChangeListener(slideListener);
-        seekBlue.setOnSeekBarChangeListener(slideListener);
+                seekRed.setOnSeekBarChangeListener(slideListener);
+                seekGreen.setOnSeekBarChangeListener(slideListener);
+                seekBlue.setOnSeekBarChangeListener(slideListener);
+            }
+        }).start();
 
-        fabBR_UP = findViewById(R.id.fabBR_UP);
-        fabBR_DO = findViewById(R.id.fabBR_DO);
-        fabOFF = findViewById(R.id.fabOFF);
-        fabON = findViewById(R.id.fabON);
-        fabRED = findViewById(R.id.fabRED);
-        fabGREEN = findViewById(R.id.fabGREEN);
-        fabBLUE = findViewById(R.id.fabBLUE);
-        fabWHITE = findViewById(R.id.fabWHITE);
-        fabORANGE = findViewById(R.id.fabORANGE);
-        fabPEAGREEN = findViewById(R.id.fabPEA_GREEN);
-        fabDARK_BLUE = findViewById(R.id.fabDARK_BLUE);
-        fabDARK_YELLOW = findViewById(R.id.fabDARK_YELLOW);
-        fabCYAN = findViewById(R.id.fabCYAN);
-        fabDARK_PINK = findViewById(R.id.fabDARK_PINK);
-        fabYELLOW = findViewById(R.id.fabYELLOW);
-        fabLIGHT_BLUE = findViewById(R.id.fabLIGHT_BLUE);
-        fabPINK = findViewById(R.id.fabPINK);
-        fabSTRAW_YELLOW = findViewById(R.id.fabSTRAW_YELLOW);
-        fabSKY_BLUE = findViewById(R.id.fabSKY_BLUE);
-        fabPURPLE = findViewById(R.id.fabPURPLE);
-        fabFLASH = findViewById(R.id.fabFLASH);
-        fabSTROBE = findViewById(R.id.fabSTROBE);
-        fabFADE = findViewById(R.id.fabFADE);
-        fabSMOOTH = findViewById(R.id.fabSMOOTH);
-        fabColor = findViewById(R.id.fabColor);
+        new Thread(new Runnable() {
+            public void run() {
+                fabBR_UP = findViewById(R.id.fabBR_UP);
+                fabBR_DO = findViewById(R.id.fabBR_DO);
+                fabOFF = findViewById(R.id.fabOFF);
+                fabON = findViewById(R.id.fabON);
+                fabRED = findViewById(R.id.fabRED);
+                fabGREEN = findViewById(R.id.fabGREEN);
+                fabBLUE = findViewById(R.id.fabBLUE);
+                fabWHITE = findViewById(R.id.fabWHITE);
+                fabORANGE = findViewById(R.id.fabORANGE);
+                fabPEAGREEN = findViewById(R.id.fabPEA_GREEN);
+                fabDARK_BLUE = findViewById(R.id.fabDARK_BLUE);
+                fabDARK_YELLOW = findViewById(R.id.fabDARK_YELLOW);
+                fabCYAN = findViewById(R.id.fabCYAN);
+                fabDARK_PINK = findViewById(R.id.fabDARK_PINK);
+                fabYELLOW = findViewById(R.id.fabYELLOW);
+                fabLIGHT_BLUE = findViewById(R.id.fabLIGHT_BLUE);
+                fabPINK = findViewById(R.id.fabPINK);
+                fabSTRAW_YELLOW = findViewById(R.id.fabSTRAW_YELLOW);
+                fabSKY_BLUE = findViewById(R.id.fabSKY_BLUE);
+                fabPURPLE = findViewById(R.id.fabPURPLE);
+                fabFLASH = findViewById(R.id.fabFLASH);
+                fabSTROBE = findViewById(R.id.fabSTROBE);
+                fabFADE = findViewById(R.id.fabFADE);
+                fabSMOOTH = findViewById(R.id.fabSMOOTH);
+                fabColor = findViewById(R.id.fabColor);
 
-        fabBR_UP.setOnClickListener(fabListener);
-        fabBR_DO.setOnClickListener(fabListener);
-        fabOFF.setOnClickListener(fabListener);
-        fabON.setOnClickListener(fabListener);
-        fabRED.setOnClickListener(fabListener);
-        fabBLUE.setOnClickListener(fabListener);
-        fabWHITE.setOnClickListener(fabListener);
-        fabORANGE.setOnClickListener(fabListener);
-        fabPEAGREEN.setOnClickListener(fabListener);
-        fabDARK_BLUE.setOnClickListener(fabListener);
-        fabDARK_YELLOW.setOnClickListener(fabListener);
-        fabCYAN.setOnClickListener(fabListener);
-        fabDARK_PINK.setOnClickListener(fabListener);
-        fabYELLOW.setOnClickListener(fabListener);
-        fabLIGHT_BLUE.setOnClickListener(fabListener);
-        fabPINK.setOnClickListener(fabListener);
-        fabSTRAW_YELLOW.setOnClickListener(fabListener);
-        fabSKY_BLUE.setOnClickListener(fabListener);
-        fabPURPLE.setOnClickListener(fabListener);
-        fabGREEN.setOnClickListener(fabListener);
-        fabFLASH.setOnClickListener(fabListener);
-        fabSTROBE.setOnClickListener(fabListener);
-        fabFADE.setOnClickListener(fabListener);
-        fabSMOOTH.setOnClickListener(fabListener);
-        fabRED.setImageBitmap(textAsBitmap("R", 40, Color.WHITE));
-        fabGREEN.setImageBitmap(textAsBitmap("G", 40, Color.WHITE));
-        fabBLUE.setImageBitmap(textAsBitmap("B", 40, Color.WHITE));
-        fabWHITE.setImageBitmap(textAsBitmap("W", 40, Color.BLACK));
-        fabON.setImageBitmap(textAsBitmap("ON ", 40, Color.WHITE));
-        fabOFF.setImageBitmap(textAsBitmap("OFF", 40, Color.WHITE));
+                fabBR_UP.setOnClickListener(fabListener);
+                fabBR_DO.setOnClickListener(fabListener);
+                fabOFF.setOnClickListener(fabListener);
+                fabON.setOnClickListener(fabListener);
+                fabRED.setOnClickListener(fabListener);
+                fabBLUE.setOnClickListener(fabListener);
+                fabWHITE.setOnClickListener(fabListener);
+                fabORANGE.setOnClickListener(fabListener);
+                fabPEAGREEN.setOnClickListener(fabListener);
+                fabDARK_BLUE.setOnClickListener(fabListener);
+                fabDARK_YELLOW.setOnClickListener(fabListener);
+                fabCYAN.setOnClickListener(fabListener);
+                fabDARK_PINK.setOnClickListener(fabListener);
+                fabYELLOW.setOnClickListener(fabListener);
+                fabLIGHT_BLUE.setOnClickListener(fabListener);
+                fabPINK.setOnClickListener(fabListener);
+                fabSTRAW_YELLOW.setOnClickListener(fabListener);
+                fabSKY_BLUE.setOnClickListener(fabListener);
+                fabPURPLE.setOnClickListener(fabListener);
+                fabGREEN.setOnClickListener(fabListener);
+                fabFLASH.setOnClickListener(fabListener);
+                fabSTROBE.setOnClickListener(fabListener);
+                fabFADE.setOnClickListener(fabListener);
+                fabSMOOTH.setOnClickListener(fabListener);
+                fabRED.setImageBitmap(textAsBitmap("R", 40, Color.WHITE));
+                fabGREEN.setImageBitmap(textAsBitmap("G", 40, Color.WHITE));
+                fabBLUE.setImageBitmap(textAsBitmap("B", 40, Color.WHITE));
+                fabWHITE.setImageBitmap(textAsBitmap("W", 40, Color.BLACK));
+                fabON.setImageBitmap(textAsBitmap("ON ", 40, Color.WHITE));
+                fabOFF.setImageBitmap(textAsBitmap("OFF", 40, Color.WHITE));
+            }
+        }).start();
 
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    init();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override
@@ -309,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() throws IOException {
+        boolean isPaired = false;
         BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
 
         if (blueAdapter != null) {
@@ -330,9 +343,15 @@ public class MainActivity extends AppCompatActivity {
                             inStream = socket.getInputStream();
                             Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connected", Snackbar.LENGTH_LONG);
                             mySnackbar.show();
+                            isPaired = true;
+                            Log.e("Paired?:", "value"+isPaired);
                             break;
                         }
                     }
+                }
+                if(!isPaired){
+                    Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Your device is not yet paired or the MAC-address is wrong in the settings.", Snackbar.LENGTH_LONG);
+                    mySnackbar.show();
                 }
                 Log.e("error", "No appropriate paired devices.");
             } else {
