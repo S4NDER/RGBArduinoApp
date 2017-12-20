@@ -275,10 +275,20 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    protected  FloatingActionButton.OnLongClickListener lstnr = new FloatingActionButton.OnLongClickListener(){
+
+
+        @Override
+        public boolean onLongClick(View v) {
+            return false;
+        }
+    };
+
     protected FloatingActionButton.OnClickListener fabListener = new FloatingActionButton.OnClickListener(){
 
         @Override
         public void onClick(View v) {
+
             if(v.getId() == findViewById(R.id.fabBR_UP).getId()) {
                 ir_command = IR_BRIGHT_UP;
             }
@@ -465,6 +475,7 @@ public class MainActivity extends AppCompatActivity {
             } else{
                 Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Your device is probably not paired or connected", Snackbar.LENGTH_LONG);
                 mySnackbar.show();
+                init();
             }
         } catch (Exception e){
 
@@ -519,6 +530,14 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        if (id == R.id.action_reconnect) {
+            try {
+                init();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return true;
         }
 
