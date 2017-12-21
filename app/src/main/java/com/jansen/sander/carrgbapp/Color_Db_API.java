@@ -20,6 +20,9 @@ public interface Color_Db_API {
     @Delete
     void delete(CustomColor customColor);
 
+    @Query("DELETE FROM customcolor")
+    void reset();
+
     @Query("DELETE FROM customcolor WHERE cid LIKE :cid")
     void deleteById(int cid);
 

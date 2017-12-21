@@ -1,5 +1,7 @@
 package com.jansen.sander.carrgbapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.AsyncTask;
@@ -12,9 +14,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SeekBar;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,8 +63,40 @@ public class ColorBrowsingActivity extends AppCompatActivity {
             finish();
             return true;
         }
+
+        if (id == R.id.action_drop_database) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Delete all colors?").setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.database_options, menu);
+        return true;
+    }
+
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    new DeleteAllColorsTask().execute((Void)null);
+                    int size = mAdapter.customColors.size();
+                    mAdapter.customColors.clear();
+                    mAdapter.notifyItemRangeRemoved(0, size);
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    //No button clicked
+                    break;
+            }
+        }
+    };
 
     private void getAllSavedColors(){
         new GetAllSavedColorsTask().execute((Void)null);
@@ -155,6 +191,16 @@ public class ColorBrowsingActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... voids) {
             AppDatabase.getInstance(getApplicationContext()).color_db_api()
                     .deleteById(cid);
+            return true;
+        }
+    }
+
+    public class DeleteAllColorsTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            AppDatabase.getInstance(getApplicationContext()).color_db_api()
+                    .reset();
             return true;
         }
     }
