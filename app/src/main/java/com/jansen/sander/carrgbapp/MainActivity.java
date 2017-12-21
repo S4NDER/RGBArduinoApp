@@ -39,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
     protected boolean connected = false;
     protected boolean fabLongPressed = false;
 
-    protected int COLOR = 0;
-    protected int COLOR_DELAY = 1;
-    protected int IR_VALUE = 2;
+    protected final int COLOR = 0;
+    protected final int COLOR_DELAY = 1;
+    protected final int IR_VALUE = 2;
     protected int red, green, blue, delay;
     protected String data;
     protected String ir_command="";
@@ -361,7 +361,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     fabLongPressed = false;
                 }
-
                 return;
             }
             if(v.getId() == findViewById(R.id.fabBR_UP).getId()) {
@@ -481,15 +480,10 @@ public class MainActivity extends AppCompatActivity {
     };
 
     protected void send_data(int type) throws IOException {
-        if (type == COLOR) {
-            data = "{\"red\":" + red + ",\"green\":" + green + ",\"blue\":" + blue + "}";
-        }
-        if (type == COLOR_DELAY){
-            data = "{\"red\":" + red + ",\"green\":" + green + ",\"blue\":" + blue + ",\"delay\":" + delay +"}";
-        }
-
-        if (type == IR_VALUE){
-            data = "{\"ir_val\":"+ ir_command +"}";
+        switch (type){
+            case COLOR: data = "{\"red\":" + red + ",\"green\":" + green + ",\"blue\":" + blue + "}"; break;
+            case COLOR_DELAY: data = "{\"red\":" + red + ",\"green\":" + green + ",\"blue\":" + blue + ",\"delay\":" + delay +"}"; break;
+            case IR_VALUE: data = "{\"ir_val\":"+ ir_command +"}";break;
         }
         write(data);
     }
