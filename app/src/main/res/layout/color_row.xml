@@ -3,16 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
     android:background="?android:attr/selectableItemBackground"
 
     android:clickable="true"
     android:focusable="true">
 
     <LinearLayout
-    android:background="#6a7484"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#6a7484"
         android:orientation="vertical"
         android:padding="8dp">
 

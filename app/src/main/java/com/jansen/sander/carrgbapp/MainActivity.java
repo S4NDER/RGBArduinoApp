@@ -29,6 +29,8 @@ import android.widget.SeekBar;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,7 +45,9 @@ public class MainActivity extends AppCompatActivity {
     protected int red, green, blue, delay;
     protected String data;
     protected String ir_command="";
-    protected SeekBar seekRed, seekGreen, seekBlue;
+    protected static SeekBar seekRed;
+    protected static SeekBar seekGreen;
+    protected static SeekBar seekBlue;
     private final static int REQUEST_ENABLE_BT = 1;
 
     IntentFilter filter = new IntentFilter();
@@ -249,6 +253,26 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static List<SeekBar> getSliders(){
+        List<SeekBar> sliders = new ArrayList<SeekBar>();
+        sliders.add(getSlideRed());
+        sliders.add(getSlideGreen());
+        sliders.add(getSlideBlue());
+        return sliders;
+    }
+
+    public static SeekBar getSlideRed(){
+        return seekRed;
+    }
+
+    public static SeekBar getSlideGreen(){
+        return seekGreen;
+    }
+
+    public static SeekBar getSlideBlue(){
+        return seekBlue;
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver(){
