@@ -91,7 +91,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView3" />
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/constraintLayout2"
         android:layout_width="289dp"
         android:layout_height="448dp"
         android:layout_marginBottom="8dp"
@@ -113,7 +113,7 @@
             app:backgroundTint="@android:color/holo_green_dark"
             app:layout_constraintStart_toEndOf="@+id/fabOFF"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:color/holo_green_dark" />
+            app:srcCompat="@android:color/holo_green_dark" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabOFF"
@@ -125,16 +125,17 @@
             app:backgroundTint="@android:color/holo_red_dark"
             app:layout_constraintStart_toEndOf="@+id/fabBR_DO"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:color/holo_red_dark" />
+            app:srcCompat="@android:color/holo_red_dark" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabBR_DO"
-            android:src="@drawable/ic_brightness_low_black_24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_brightness_low_black_24dp"
             app:backgroundTint="#FFFFFFFF"
             app:layout_constraintStart_toEndOf="@+id/fabBR_UP"
             app:layout_constraintTop_toTopOf="parent" />
@@ -148,7 +149,7 @@
             android:clickable="true"
             app:backgroundTint="#FFFFFFFF"
             app:layout_constraintStart_toEndOf="@+id/fabBLUE"
-            app:layout_constraintTop_toBottomOf="@+id/fabBR_UP" />
+            app:layout_constraintTop_toBottomOf="@+id/fabBR_UP" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabFLASH"
@@ -161,7 +162,7 @@
             app:backgroundTint="@android:color/darker_gray"
             app:layout_constraintStart_toEndOf="@+id/fabDARK_BLUE"
             app:layout_constraintTop_toBottomOf="@+id/fabRED"
-            app:srcCompat="@android:color/darker_gray" />
+            app:srcCompat="@android:color/darker_gray" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabSTROBE"
@@ -174,7 +175,7 @@
             app:backgroundTint="@android:color/darker_gray"
             app:layout_constraintStart_toEndOf="@+id/fabDARK_PINK"
             app:layout_constraintTop_toBottomOf="@+id/fabORANGE"
-            app:srcCompat="@android:color/darker_gray" />
+            app:srcCompat="@android:color/darker_gray" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabFADE"
@@ -187,7 +188,7 @@
             app:backgroundTint="@android:color/darker_gray"
             app:layout_constraintStart_toEndOf="@+id/fabPINK"
             app:layout_constraintTop_toBottomOf="@+id/fabDARK_YELLOW"
-            app:srcCompat="@android:color/darker_gray" />
+            app:srcCompat="@android:color/darker_gray" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabBLUE"
@@ -199,7 +200,7 @@
             app:backgroundTint="@android:color/holo_blue_dark"
             app:layout_constraintStart_toEndOf="@+id/fabGREEN"
             app:layout_constraintTop_toBottomOf="@+id/fabBR_UP"
-            app:srcCompat="@android:color/holo_blue_dark" />
+            app:srcCompat="@android:color/holo_blue_dark" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabDARK_BLUE"
@@ -211,7 +212,7 @@
             app:backgroundTint="@android:color/holo_blue_light"
             app:layout_constraintStart_toEndOf="@+id/fabPEA_GREEN"
             app:layout_constraintTop_toBottomOf="@+id/fabRED"
-            app:srcCompat="@android:color/holo_blue_light" />
+            app:srcCompat="@android:color/holo_blue_light" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabDARK_PINK"
@@ -222,7 +223,7 @@
             android:clickable="true"
             app:backgroundTint="#ffaa66cc"
             app:layout_constraintStart_toEndOf="@+id/fabCYAN"
-            app:layout_constraintTop_toBottomOf="@+id/fabORANGE" />
+            app:layout_constraintTop_toBottomOf="@+id/fabORANGE" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabPINK"
@@ -233,7 +234,7 @@
             android:clickable="true"
             app:backgroundTint="#FF8B3050"
             app:layout_constraintStart_toEndOf="@+id/fabLIGHT_BLUE"
-            app:layout_constraintTop_toBottomOf="@+id/fabDARK_YELLOW" />
+            app:layout_constraintTop_toBottomOf="@+id/fabDARK_YELLOW" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabGREEN"
@@ -245,7 +246,7 @@
             app:backgroundTint="@android:color/holo_green_dark"
             app:layout_constraintStart_toEndOf="@+id/fabRED"
             app:layout_constraintTop_toBottomOf="@+id/fabBR_UP"
-            app:srcCompat="@android:color/holo_green_dark" />
+            app:srcCompat="@android:color/holo_green_dark" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabPEA_GREEN"
@@ -257,7 +258,7 @@
             app:backgroundTint="@android:color/holo_green_light"
             app:layout_constraintStart_toEndOf="@+id/fabORANGE"
             app:layout_constraintTop_toBottomOf="@+id/fabRED"
-            app:srcCompat="@android:color/holo_green_light" />
+            app:srcCompat="@android:color/holo_green_light" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabCYAN"
@@ -269,7 +270,7 @@
             app:backgroundTint="@android:color/holo_blue_bright"
             app:layout_constraintStart_toEndOf="@+id/fabDARK_YELLOW"
             app:layout_constraintTop_toBottomOf="@+id/fabORANGE"
-            app:srcCompat="@android:color/holo_blue_bright" />
+            app:srcCompat="@android:color/holo_blue_bright" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabLIGHT_BLUE"
@@ -280,7 +281,7 @@
             android:clickable="true"
             app:backgroundTint="#FF2C7889"
             app:layout_constraintStart_toEndOf="@+id/fabYELLOW"
-            app:layout_constraintTop_toBottomOf="@+id/fabDARK_YELLOW" />
+            app:layout_constraintTop_toBottomOf="@+id/fabDARK_YELLOW" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabRED"
@@ -292,7 +293,7 @@
             app:backgroundTint="@android:color/holo_red_dark"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fabBR_UP"
-            app:srcCompat="@android:color/holo_red_dark" />
+            app:srcCompat="@android:color/holo_red_dark" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabORANGE"
@@ -304,7 +305,7 @@
             app:backgroundTint="@android:color/holo_red_light"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fabRED"
-            app:srcCompat="@android:color/holo_red_light" />
+            app:srcCompat="@android:color/holo_red_light" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabDARK_YELLOW"
@@ -315,7 +316,7 @@
             android:clickable="true"
             app:backgroundTint="#ffff5000"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fabORANGE" />
+            app:layout_constraintTop_toBottomOf="@+id/fabORANGE" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabYELLOW"
@@ -327,7 +328,7 @@
             app:backgroundTint="@android:color/holo_orange_dark"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fabDARK_YELLOW"
-            app:srcCompat="@android:color/holo_orange_dark" />
+            app:srcCompat="@android:color/holo_orange_dark" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabSTRAW_YELLOW"
@@ -339,7 +340,7 @@
             app:backgroundTint="@android:color/holo_orange_light"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fabYELLOW"
-            app:srcCompat="@android:color/holo_orange_light" />
+            app:srcCompat="@android:color/holo_orange_light" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabSKY_BLUE"
@@ -350,7 +351,7 @@
             android:clickable="true"
             app:backgroundTint="#FF235E6B"
             app:layout_constraintStart_toEndOf="@+id/fabSTRAW_YELLOW"
-            app:layout_constraintTop_toBottomOf="@+id/fabYELLOW" />
+            app:layout_constraintTop_toBottomOf="@+id/fabYELLOW" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabPURPLE"
@@ -361,7 +362,7 @@
             android:clickable="true"
             app:backgroundTint="#FFFF005A"
             app:layout_constraintStart_toEndOf="@+id/fabSKY_BLUE"
-            app:layout_constraintTop_toBottomOf="@+id/fabYELLOW" />
+            app:layout_constraintTop_toBottomOf="@+id/fabYELLOW" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabSMOOTH"
@@ -374,16 +375,17 @@
             app:backgroundTint="@android:color/darker_gray"
             app:layout_constraintStart_toEndOf="@+id/fabPURPLE"
             app:layout_constraintTop_toBottomOf="@+id/fabYELLOW"
-            app:srcCompat="@android:color/darker_gray" />
+            app:srcCompat="@android:color/darker_gray" android:focusable="true" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabBR_UP"
-            android:src="@drawable/ic_brightness_high_black_24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_brightness_high_black_24dp"
             app:backgroundTint="#FFFFFFFF"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -396,9 +398,10 @@
         android:layout_marginEnd="24dp"
         android:layout_marginTop="12dp"
         android:clickable="true"
+        android:src="@drawable/ic_save_black_24dp"
         app:backgroundTint="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/slideBlue"
-        app:srcCompat="@android:color/transparent" />
+        app:srcCompat="@android:color/transparent" android:focusable="true" />
 
 </android.support.constraint.ConstraintLayout>

@@ -17,7 +17,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -26,19 +25,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     protected String mac_arduino;
 
     protected boolean connected = false;
+    protected boolean fabLongPressed = false;
 
     protected int COLOR = 0;
     protected int COLOR_DELAY = 1;
@@ -307,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onLongClick(View v) {
             if (v.getId() == findViewById(R.id.fabColor).getId()){
+                fabLongPressed = true;
                 saveNewColor();
             }
             return false;
@@ -317,8 +315,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if(v.getId() == findViewById(R.id.fabColor).getId()){
-                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Long press to save custom color", Snackbar.LENGTH_LONG);
-                mySnackbar.show();
+                if(!fabLongPressed){
+                    Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Long press to save custom color", Snackbar.LENGTH_LONG);
+                    mySnackbar.show();
+                } else {
+                    fabLongPressed = false;
+                }
+
                 return;
             }
             if(v.getId() == findViewById(R.id.fabBR_UP).getId()) {
@@ -610,6 +613,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
+                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Saved!", Snackbar.LENGTH_LONG);
+                mySnackbar.show();
 
             } else {
                 Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Could not save color", Snackbar.LENGTH_LONG);
