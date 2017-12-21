@@ -619,11 +619,24 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_reconnect) {
-            try {
-                init();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (!connected){
+                try {
+                    new Thread(new Runnable() {
+                        public void run() {
+                            Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Reconnecting", Snackbar.LENGTH_LONG);
+                            mySnackbar.show();
+                        }
+                    }).start();
+
+                    init();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "You should be still connected", Snackbar.LENGTH_LONG);
+                mySnackbar.show();
             }
+
             return true;
         }
 
