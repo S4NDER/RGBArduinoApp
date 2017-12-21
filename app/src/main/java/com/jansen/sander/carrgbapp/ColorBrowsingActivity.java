@@ -58,7 +58,7 @@ public class ColorBrowsingActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(mAdapter);
 
-        Looper.prepare(); //Needs to be called, otherwise you get this error message: Can't create handler inside thread that has not called Looper.prepare()
+        //Looper.prepare(); //Needs to be called, otherwise you get this error message: Can't create handler inside thread that has not called Looper.prepare()
         swipeController = new SwipeController(new SwipeControllerActions() {
             @Override
             public void onRightClicked(int position) {
@@ -91,17 +91,21 @@ public class ColorBrowsingActivity extends AppCompatActivity {
 
         @Override
         protected List<CustomColor> doInBackground(Void... voids) {
-            List<CustomColor> allSavedColors = AppDatabase.getInstance(getApplicationContext()).color_db_api()
+            allSavedColors = AppDatabase.getInstance(getApplicationContext()).color_db_api()
                     .getStoredColors();
 
             for (CustomColor colorX : allSavedColors){
                 Log.v("Color", "RGB: " + colorX.getRed() + ", " + colorX.getGreen() + ", " +  colorX.getBlue() + "   id: " + colorX.getCid());
             }
+
+            return allSavedColors;
+        }
+
+        @Override
+        protected void onPostExecute(final List<CustomColor> allSavedColors) {
             mAdapter = new CustomColorDataAdapter(allSavedColors);
             allColors = allSavedColors;
             setupRecyclerView();
-
-            return allSavedColors;
         }
     }
 
