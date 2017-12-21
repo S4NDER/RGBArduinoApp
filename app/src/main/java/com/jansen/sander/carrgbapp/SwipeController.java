@@ -1,9 +1,12 @@
 package com.jansen.sander.carrgbapp;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper.Callback;
 import android.util.Log;
@@ -163,6 +166,12 @@ class SwipeController extends Callback {
 
         RectF rightButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding, itemView.getTop(), itemView.getRight(), itemView.getBottom());
         p.setColor(Color.RED);
+
+        //Bitmap bmp = MainActivity.getTrashCan();
+
+        Bitmap bmp =BitmapFactory.decodeResource(MainActivity.getContext().getResources(), R.drawable.ic_delete_black_24dp);
+        c.drawBitmap(bmp, 0, 0, p);
+
         c.drawRoundRect(rightButton, corners, corners, p);
         drawText("Delete", c, rightButton, p);
 
