@@ -2,7 +2,6 @@ package com.jansen.sander.carrgbapp;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,14 +25,12 @@ public class CustomColorDataAdapter extends RecyclerView.Adapter<CustomColorData
             title = (TextView) itemView.findViewById(R.id.rgb_color_title);
             color = (TextView) itemView.findViewById(R.id.custom_red);
             colorbar =(TextView) itemView.findViewById(R.id.color_bar);
-
         }
     }
 
     public CustomColorDataAdapter(List<CustomColor> customColors){
         this.customColors = customColors;
     }
-
 
     @Override
     public CustomColorViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -58,7 +55,6 @@ public class CustomColorDataAdapter extends RecyclerView.Adapter<CustomColorData
 
     public int getCid(int position){
         CustomColor customColor = customColors.get(position);
-        Log.e("index or wtf", ""+customColor.getCid());
         return customColor.getCid();
     }
 }

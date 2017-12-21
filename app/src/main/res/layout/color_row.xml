@@ -3,15 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?android:attr/selectableItemBackground"
+    app:cardCornerRadius="0dp"
 
     android:clickable="true"
     android:focusable="true">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#6a7484"
+        android:background="#3C4149"
         android:orientation="vertical"
         android:padding="8dp">
 
@@ -24,6 +25,7 @@
                 android:id="@+id/rgb_color_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/background_light"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="RGB:" />
@@ -33,6 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="textEnd"
+                android:textColor="@android:color/darker_gray"
                 tools:text="rgb(255, 255, 255)" />
 
         </LinearLayout>
@@ -52,5 +55,8 @@
         </LinearLayout>
 
     </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black" />
 </android.support.v7.widget.CardView>

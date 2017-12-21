@@ -3,8 +3,6 @@ package com.jansen.sander.carrgbapp;
 import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,10 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.View;
 import android.widget.SeekBar;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,11 +23,7 @@ public class ColorBrowsingActivity extends AppCompatActivity {
     private SwipeController swipeController;
     private ItemTouchHelper itemTouchHelper;
     protected List<CustomColor> allColors;
-
-    protected SeekBar slideRed;
-    protected SeekBar slideGreen;
-    protected SeekBar slideBlue;
-    RecyclerView recyclerView;
+    protected RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +33,6 @@ public class ColorBrowsingActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         getAllSavedColors();
-
     }
 
     @Override
@@ -87,7 +78,7 @@ public class ColorBrowsingActivity extends AppCompatActivity {
     }
 
     public class GetAllSavedColorsTask extends AsyncTask<Void, Void, List<CustomColor>> {
-        private List<CustomColor> allSavedColors = new ArrayList<CustomColor>();
+        private List<CustomColor> allSavedColors = new ArrayList<>();
 
         @Override
         protected List<CustomColor> doInBackground(Void... voids) {
@@ -97,7 +88,6 @@ public class ColorBrowsingActivity extends AppCompatActivity {
             for (CustomColor colorX : allSavedColors){
                 Log.v("Color", "RGB: " + colorX.getRed() + ", " + colorX.getGreen() + ", " +  colorX.getBlue() + "   id: " + colorX.getCid());
             }
-
             return allSavedColors;
         }
 

@@ -1,4 +1,5 @@
 <resources>
+    <string name="theme_color">#3C4149</string>
     <string name="app_name">Car RGB App</string>
     <string name="txtRed">Red</string>
     <string name="txtGreen">Green</string>
