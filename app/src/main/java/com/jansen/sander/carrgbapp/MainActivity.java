@@ -99,6 +99,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        mac_arduino  = sharedPref.getString(SettingsActivity.MAC_ARDUINO, "98:D3:32:11:02:9D");
+
+        try {
+            init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         new Thread(new Runnable() {
             public void run() {
                 seekRed = findViewById(R.id.slideRed);
@@ -206,6 +215,29 @@ public class MainActivity extends AppCompatActivity {
                 fabColor.setOnClickListener(fabListener);
             }
         }).start();
+
+        new Thread(new Runnable() {
+            public void run() {
+                fabFLASH = findViewById(R.id.fabFLASH);
+                fabSTROBE = findViewById(R.id.fabSTROBE);
+                fabFADE = findViewById(R.id.fabFADE);
+                fabSMOOTH = findViewById(R.id.fabSMOOTH);
+                fabColor = findViewById(R.id.fabColor);
+
+                fabFLASH.setOnClickListener(fabListener);
+                fabSTROBE.setOnClickListener(fabListener);
+                fabFADE.setOnClickListener(fabListener);
+                fabSMOOTH.setOnClickListener(fabListener);
+
+                fabColor.setOnLongClickListener(longClickListener);
+                fabColor.setOnClickListener(fabListener);
+            }
+        }).start();
+
+        filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        this.registerReceiver(mReceiver, filter);
     }
 
     @Override
@@ -214,16 +246,6 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mac_arduino  = sharedPref.getString(SettingsActivity.MAC_ARDUINO, "98:D3:32:11:02:9D");
-        
-        filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
-        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
-        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
-        this.registerReceiver(mReceiver, filter);
-        try {
-            init();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
