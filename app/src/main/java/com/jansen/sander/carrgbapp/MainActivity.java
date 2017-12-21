@@ -437,6 +437,13 @@ public class MainActivity extends AppCompatActivity {
             green = ((SeekBar) findViewById(R.id.slideGreen)).getProgress();
             blue = ((SeekBar) findViewById(R.id.slideBlue)).getProgress();
             fabColor.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(red,green,blue)));
+            if (!fromUser){
+                try {
+                    send_data(COLOR);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         @Override
@@ -459,7 +466,6 @@ public class MainActivity extends AppCompatActivity {
 
     protected void send_data(int type) throws IOException {
         if (type == COLOR) {
-
             data = "{\"red\":" + red + ",\"green\":" + green + ",\"blue\":" + blue + "}";
         }
         if (type == COLOR_DELAY){
