@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper.Callback;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -130,9 +131,7 @@ class SwipeController extends Callback {
                     if (buttonsActions != null && buttonInstance != null && buttonInstance.contains(event.getX(), event.getY())) {
                         if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
                             buttonsActions.onLeftClicked(viewHolder.getAdapterPosition());
-                            buttonsActions.onLeftClicked(viewHolder.getAdapterPosition());
                         } else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
-                            buttonsActions.onRightClicked(viewHolder.getAdapterPosition());
                             buttonsActions.onRightClicked(viewHolder.getAdapterPosition());
                         }
                     }
