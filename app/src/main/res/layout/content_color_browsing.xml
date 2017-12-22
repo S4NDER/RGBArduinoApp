@@ -5,12 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3C4149"
+    android:background="@color/colorTheme"
     tools:context="com.jansen.sander.carrgbapp.ColorBrowsingActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:paddingTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"

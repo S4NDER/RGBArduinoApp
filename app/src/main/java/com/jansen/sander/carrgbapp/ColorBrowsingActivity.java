@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -16,6 +17,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.SeekBar;
 
 import java.io.IOException;
@@ -25,6 +27,7 @@ import java.util.List;
 
 public class ColorBrowsingActivity extends AppCompatActivity {
 
+    private Snackbar mySnackbar;
     private int cid;
     private CustomColorDataAdapter mAdapter;
     private SwipeController swipeController;
@@ -36,9 +39,11 @@ public class ColorBrowsingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_color_browsing);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(myToolbar);
+//        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(myToolbar);
         setupActionBar();
+        View sbView = MainActivity.mySnackbar.getView();
+        sbView.setBackgroundColor(Color.parseColor("#3C4149"));
 
         getAllSavedColors();
     }
@@ -179,7 +184,7 @@ public class ColorBrowsingActivity extends AppCompatActivity {
                 finish();
 
             } else {
-                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Could not load color", Snackbar.LENGTH_LONG);
+                mySnackbar.setText("Could not load color");
                 mySnackbar.show();
             }
         }

@@ -4,6 +4,7 @@
 
         <EditTextPreference
             android:defaultValue="98:D3:32:11:02:9D"
+            android:textColor="#FFFFFF"
             android:key="pref_mac_arduino"
             android:selectAllOnFocus="true"
             android:singleLine="true"

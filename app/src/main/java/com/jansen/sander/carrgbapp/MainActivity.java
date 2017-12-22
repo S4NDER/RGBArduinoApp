@@ -9,9 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -39,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected String mac_arduino;
     private static Context mContext;
 
+    protected static Snackbar mySnackbar;
 
     protected boolean connected = false;
     protected boolean fabLongPressed = false;
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     protected static SeekBar seekBlue;
     private final static int REQUEST_ENABLE_BT = 1;
 
-    IntentFilter filter = new IntentFilter();
+    protected IntentFilter filter = new IntentFilter();
 
     private static final String IR_BRIGHT_UP  = "0xF700FF";
     private static final String IR_BRIGHT_DOWN = "0xF7807F";
@@ -103,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = this;
+        mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connected", Snackbar.LENGTH_LONG);
+        View sbView = mySnackbar.getView();
+        sbView.setBackgroundColor(Color.parseColor("#3C4149"));
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mac_arduino  = sharedPref.getString(SettingsActivity.MAC_ARDUINO, "98:D3:32:11:02:9D");
@@ -307,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
             //Device is now connected
-                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connected", Snackbar.LENGTH_LONG);
+                mySnackbar.setText("Connected");
                 mySnackbar.show();
             }
             else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
@@ -318,14 +320,14 @@ public class MainActivity extends AppCompatActivity {
             }
             else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
                 connected = false;
-                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Disconnected... Reconnecting...", Snackbar.LENGTH_LONG);
+                mySnackbar.setText("Disconnected, reconnecting...");
                 mySnackbar.show();
                 new Thread(new Runnable() {
                     public void run() {
                         try {
                             while (!connected){
                                 if (connected){
-                                    Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Reconnected!", Snackbar.LENGTH_LONG);
+                                    mySnackbar.setText("Reconnected!");
                                     mySnackbar.show();
                                     break;
                                 } else {
@@ -361,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             if(v.getId() == findViewById(R.id.fabColor).getId()){
                 if(!fabLongPressed){
-                    Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Long press to save custom color", Snackbar.LENGTH_LONG);
+                    mySnackbar.setText("Long press to save custom color");
                     mySnackbar.show();
                 } else {
                     fabLongPressed = false;
@@ -497,7 +499,11 @@ public class MainActivity extends AppCompatActivity {
 
         new Thread(new Runnable() {
             public void run() {
-                Snackbar mySnackbar;// = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connecting...", Snackbar.LENGTH_INDEFINITE);
+                Snackbar mySnackbar;
+                mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connected", Snackbar.LENGTH_LONG);
+                View sbView = mySnackbar.getView();
+                sbView.setBackgroundColor(Color.parseColor("#3C4149"));
+
                 //mySnackbar.show();
                 boolean isPaired = false;
                 BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -532,7 +538,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                         if(!isPaired){
-                            mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Your device is not yet paired or the MAC-address is wrong in the settings.", Snackbar.LENGTH_LONG);
+                            mySnackbar.setText("Your device is not yet paired or the MAC-address is wrong in the settings.");
                             mySnackbar.show();
                             Log.e("error", "No appropriate paired devices.");
                         }
@@ -553,7 +559,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.v("Data", data);
                 outputStream.write(s.getBytes());
             } else{
-                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Your device is probably not paired or connected", Snackbar.LENGTH_LONG);
+                mySnackbar.setText("Your device is probably not paired or connected");
                 mySnackbar.show();
                 init();
             }
@@ -620,19 +626,15 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_reconnect) {
             if (!connected){
                 try {
-                    new Thread(new Runnable() {
-                        public void run() {
-                            Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Reconnecting", Snackbar.LENGTH_LONG);
-                            mySnackbar.show();
-                        }
-                    }).start();
+                    mySnackbar.setText("Reconnecting...");
+                    mySnackbar.show();
 
                     init();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else {
-                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "You should be still connected", Snackbar.LENGTH_LONG);
+                mySnackbar.setText("You should be still connected");
                 mySnackbar.show();
             }
 
@@ -651,7 +653,7 @@ public class MainActivity extends AppCompatActivity {
             new SaveNewColorTask(new CustomColor(red, green, blue)).execute((Void)null);
             return true;
         } catch (Exception e){
-            Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Could not save color", Snackbar.LENGTH_LONG);
+            mySnackbar.setText("Could not save color");
             mySnackbar.show();
         }
         return false;
@@ -675,11 +677,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
-                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Saved!", Snackbar.LENGTH_LONG);
+                mySnackbar.setText("Saved!");
                 mySnackbar.show();
 
             } else {
-                Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Could not save color", Snackbar.LENGTH_LONG);
+                mySnackbar.setText("Could not save color");
                 mySnackbar.show();
             }
         }
