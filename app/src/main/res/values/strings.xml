@@ -96,4 +96,5 @@
     <string name="errorLoad">Could not load color</string>
     <string name="rgbColor">RGB Color:</string>
     <string name="rgbValues">rgb(%$d, %$d, %$d)</string>
+    <string name="duplicate">You have this color already</string>
 </resources>

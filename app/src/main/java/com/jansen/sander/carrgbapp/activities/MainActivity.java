@@ -29,6 +29,7 @@ import android.widget.SeekBar;
 import com.jansen.sander.carrgbapp.AppDatabase;
 import com.jansen.sander.carrgbapp.R;
 import com.jansen.sander.carrgbapp.classes.CustomColor;
+import com.jansen.sander.carrgbapp.classes.CustomColorDataAdapter;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -555,6 +556,9 @@ public class MainActivity extends AppCompatActivity {
 
     public class SaveNewColorTask extends AsyncTask<Void, Void, Boolean> {
         private final CustomColor newColor;
+        private boolean success = false;
+        private List<CustomColor> allSavedColors = new ArrayList<>();
+        private boolean alreadySaved = false;
 
         SaveNewColorTask(CustomColor newColor){
             this.newColor = newColor;
@@ -562,8 +566,20 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            AppDatabase.getInstance(getApplicationContext()).color_db_api().insertAllColors(newColor);
-            return true;
+            allSavedColors = AppDatabase.getInstance(getApplicationContext()).color_db_api().getStoredColors();
+            for (CustomColor colorX : allSavedColors){
+                if ((colorX.getRed()==newColor.getRed()) &(colorX.getGreen()==newColor.getGreen()) &(colorX.getBlue()== newColor.getBlue())){
+                    alreadySaved = true;
+                    break;
+                }
+            }
+            if(!alreadySaved){
+                AppDatabase.getInstance(getApplicationContext()).color_db_api().insertAllColors(newColor);
+                success = true;
+            } else {
+                success = false;
+            }
+            return success;
         }
 
         @Override
@@ -571,7 +587,7 @@ public class MainActivity extends AppCompatActivity {
             if (success) {
                 mySnackbar.setText(R.string.saved).show();
             } else {
-                mySnackbar.setText(R.string.errorSave).show();
+                mySnackbar.setText(R.string.duplicate).show();
             }
         }
     }
