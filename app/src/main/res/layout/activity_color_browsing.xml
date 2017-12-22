@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jansen.sander.carrgbapp.ColorBrowsingActivity">
+    tools:context="com.jansen.sander.carrgbapp.activities.ColorBrowsingActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

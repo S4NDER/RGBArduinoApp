@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorTheme"
-    tools:context="com.jansen.sander.carrgbapp.MainActivity">
+    tools:context="com.jansen.sander.carrgbapp.activities.MainActivity">
 
     <TextView
         android:id="@+id/txtRed"

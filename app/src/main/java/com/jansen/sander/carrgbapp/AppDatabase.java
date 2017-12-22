@@ -5,6 +5,9 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import com.jansen.sander.carrgbapp.classes.CustomColor;
+import com.jansen.sander.carrgbapp.interfaces.Color_Db_API;
+
 /**
  * Created by Sander on 20/12/2017.
  */

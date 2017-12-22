@@ -1,8 +1,7 @@
-package com.jansen.sander.carrgbapp;
+package com.jansen.sander.carrgbapp.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -12,7 +11,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
@@ -20,7 +18,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
 
-import java.io.IOException;
+import com.jansen.sander.carrgbapp.AppDatabase;
+import com.jansen.sander.carrgbapp.R;
+import com.jansen.sander.carrgbapp.classes.CustomColor;
+import com.jansen.sander.carrgbapp.classes.CustomColorDataAdapter;
+import com.jansen.sander.carrgbapp.classes.SwipeController;
+import com.jansen.sander.carrgbapp.classes.SwipeControllerActions;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,17 +37,15 @@ public class ColorBrowsingActivity extends AppCompatActivity {
     private CustomColorDataAdapter mAdapter;
     private SwipeController swipeController;
     private ItemTouchHelper itemTouchHelper;
-    protected List<CustomColor> allColors;
-    protected RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_color_browsing);
-//        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(myToolbar);
         setupActionBar();
-        View sbView = MainActivity.mySnackbar.getView();
+        mySnackbar = MainActivity.mySnackbar;
+        View sbView = mySnackbar.getView();
         sbView.setBackgroundColor(Color.parseColor("#3C4149"));
 
         getAllSavedColors();
@@ -91,8 +94,8 @@ public class ColorBrowsingActivity extends AppCompatActivity {
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
                     new DeleteAllColorsTask().execute((Void)null);
-                    int size = mAdapter.customColors.size();
-                    mAdapter.customColors.clear();
+                    int size = mAdapter.getCustomColors().size();
+                    mAdapter.getCustomColors().clear();
                     mAdapter.notifyItemRangeRemoved(0, size);
                     break;
 
@@ -108,18 +111,17 @@ public class ColorBrowsingActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(){
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(mAdapter);
 
-        //Looper.prepare(); //Needs to be called, otherwise you get this error message: Can't create handler inside thread that has not called Looper.prepare()
         swipeController = new SwipeController(new SwipeControllerActions() {
             @Override
             public void onRightClicked(int position) {
                 cid = mAdapter.getCid(position);
                 new DeleteSavedColorsTask().execute((Void)null);
 
-                mAdapter.customColors.remove(position);
+                mAdapter.getCustomColors().remove(position);
                 mAdapter.notifyItemRemoved(position);
                 mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
             }
@@ -145,9 +147,7 @@ public class ColorBrowsingActivity extends AppCompatActivity {
 
         @Override
         protected List<CustomColor> doInBackground(Void... voids) {
-            allSavedColors = AppDatabase.getInstance(getApplicationContext()).color_db_api()
-                    .getStoredColors();
-
+            allSavedColors = AppDatabase.getInstance(getApplicationContext()).color_db_api().getStoredColors();
             for (CustomColor colorX : allSavedColors){
                 Log.v("Color", "RGB: " + colorX.getRed() + ", " + colorX.getGreen() + ", " +  colorX.getBlue() + "   id: " + colorX.getCid());
             }
@@ -157,17 +157,14 @@ public class ColorBrowsingActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final List<CustomColor> allSavedColors) {
             mAdapter = new CustomColorDataAdapter(allSavedColors);
-            allColors = allSavedColors;
             setupRecyclerView();
         }
     }
 
     public class GetSavedColorByIdTask extends AsyncTask<Void, Void, Boolean > {
-
         @Override
         protected Boolean doInBackground(Void... voids) {
-            List<CustomColor> colorByCid = AppDatabase.getInstance(getApplicationContext()).color_db_api()
-                    .colorByCid(cid);
+            List<CustomColor> colorByCid = AppDatabase.getInstance(getApplicationContext()).color_db_api().colorByCid(cid);
             ArrayList<SeekBar> sliders = (ArrayList<SeekBar>) MainActivity.getSliders();
             for (CustomColor colorX : colorByCid){
                 Log.v("Color", "RGB: " + colorX.getRed() + ", " + colorX.getGreen() + ", " +  colorX.getBlue() + "   id: " + colorX.getCid());
@@ -182,32 +179,25 @@ public class ColorBrowsingActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             if (success) {
                 finish();
-
             } else {
-                mySnackbar.setText("Could not load color");
-                mySnackbar.show();
+                mySnackbar.setText("Could not load color").show();
             }
         }
     }
 
     public class DeleteSavedColorsTask extends AsyncTask<Void, Void, Boolean> {
-
         @Override
         protected Boolean doInBackground(Void... voids) {
-            AppDatabase.getInstance(getApplicationContext()).color_db_api()
-                    .deleteById(cid);
+            AppDatabase.getInstance(getApplicationContext()).color_db_api().deleteById(cid);
             return true;
         }
     }
 
     public class DeleteAllColorsTask extends AsyncTask<Void, Void, Boolean> {
-
         @Override
         protected Boolean doInBackground(Void... voids) {
-            AppDatabase.getInstance(getApplicationContext()).color_db_api()
-                    .reset();
+            AppDatabase.getInstance(getApplicationContext()).color_db_api().reset();
             return true;
         }
     }
-
 }

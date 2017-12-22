@@ -1,4 +1,4 @@
-package com.jansen.sander.carrgbapp;
+package com.jansen.sander.carrgbapp.classes;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;

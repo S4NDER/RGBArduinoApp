@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorTheme"
-    tools:context="com.jansen.sander.carrgbapp.ColorBrowsingActivity">
+    tools:context="com.jansen.sander.carrgbapp.activities.ColorBrowsingActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"

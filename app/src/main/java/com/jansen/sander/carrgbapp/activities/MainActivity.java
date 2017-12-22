@@ -1,4 +1,4 @@
-package com.jansen.sander.carrgbapp;
+package com.jansen.sander.carrgbapp.activities;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -25,6 +25,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
+
+import com.jansen.sander.carrgbapp.AppDatabase;
+import com.jansen.sander.carrgbapp.R;
+import com.jansen.sander.carrgbapp.classes.CustomColor;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -309,8 +313,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
             //Device is now connected
-                mySnackbar.setText("Connected");
-                mySnackbar.show();
+                mySnackbar.setText("Connected").show();
             }
             else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
             //Done searching
@@ -320,15 +323,13 @@ public class MainActivity extends AppCompatActivity {
             }
             else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
                 connected = false;
-                mySnackbar.setText("Disconnected, reconnecting...");
-                mySnackbar.show();
+                mySnackbar.setText("Disconnected, reconnecting...").show();
                 new Thread(new Runnable() {
                     public void run() {
                         try {
                             while (!connected){
                                 if (connected){
-                                    mySnackbar.setText("Reconnected!");
-                                    mySnackbar.show();
+                                    mySnackbar.setText("Reconnected!").show();
                                     break;
                                 } else {
                                     init();
@@ -340,7 +341,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }).start();
-
             }
         }
     };
@@ -363,8 +363,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             if(v.getId() == findViewById(R.id.fabColor).getId()){
                 if(!fabLongPressed){
-                    mySnackbar.setText("Long press to save custom color");
-                    mySnackbar.show();
+                    mySnackbar.setText("Long press to save custom color").show();
                 } else {
                     fabLongPressed = false;
                 }
@@ -447,7 +446,6 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     };
 
@@ -496,7 +494,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() throws IOException {
-
         new Thread(new Runnable() {
             public void run() {
                 Snackbar mySnackbar;
@@ -504,14 +501,12 @@ public class MainActivity extends AppCompatActivity {
                 View sbView = mySnackbar.getView();
                 sbView.setBackgroundColor(Color.parseColor("#3C4149"));
 
-                //mySnackbar.show();
                 boolean isPaired = false;
                 BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
 
                 if (blueAdapter != null) {
                     if (blueAdapter.isEnabled()) {
                         Set<BluetoothDevice> pairedDevices = blueAdapter.getBondedDevices();
-
                         if (pairedDevices.size() > 0) {
                             // There are paired devices. Get the name and address of each paired device.
                             for (BluetoothDevice device : pairedDevices) {
@@ -531,15 +526,13 @@ public class MainActivity extends AppCompatActivity {
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-
                                     isPaired = true;
                                     break;
                                 }
                             }
                         }
                         if(!isPaired){
-                            mySnackbar.setText("Your device is not yet paired or the MAC-address is wrong in the settings.");
-                            mySnackbar.show();
+                            mySnackbar.setText("Your device is not yet paired or the MAC-address is wrong in the settings.").show();
                             Log.e("error", "No appropriate paired devices.");
                         }
                     } else {
@@ -559,14 +552,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.v("Data", data);
                 outputStream.write(s.getBytes());
             } else{
-                mySnackbar.setText("Your device is probably not paired or connected");
-                mySnackbar.show();
+                mySnackbar.setText("Your device is probably not paired or connected").show();
                 init();
             }
         } catch (Exception e){
 
         }
-
     }
 
     public void run() {
@@ -623,24 +614,20 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, ColorBrowsingActivity.class));
             return true;
         }
+
         if (id == R.id.action_reconnect) {
             if (!connected){
                 try {
-                    mySnackbar.setText("Reconnecting...");
-                    mySnackbar.show();
-
+                    mySnackbar.setText("Reconnecting...").show();
                     init();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else {
-                mySnackbar.setText("You should be still connected");
-                mySnackbar.show();
+                mySnackbar.setText("You should be still connected").show();
             }
-
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -653,8 +640,7 @@ public class MainActivity extends AppCompatActivity {
             new SaveNewColorTask(new CustomColor(red, green, blue)).execute((Void)null);
             return true;
         } catch (Exception e){
-            mySnackbar.setText("Could not save color");
-            mySnackbar.show();
+            mySnackbar.setText("Could not save color").show();
         }
         return false;
     }
@@ -664,25 +650,20 @@ public class MainActivity extends AppCompatActivity {
 
         SaveNewColorTask(CustomColor newColor){
             this.newColor = newColor;
-            Log.e("Color", "RGB: " + newColor.getRed()+","+ newColor.getGreen()+","+newColor.getBlue()+ "   id:" + newColor.getCid() );
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            AppDatabase.getInstance(getApplicationContext()).color_db_api()
-                    .insertAllColors(newColor);
+            AppDatabase.getInstance(getApplicationContext()).color_db_api().insertAllColors(newColor);
             return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
-                mySnackbar.setText("Saved!");
-                mySnackbar.show();
-
+                mySnackbar.setText("Saved!").show();
             } else {
-                mySnackbar.setText("Could not save color");
-                mySnackbar.show();
+                mySnackbar.setText("Could not save color").show();
             }
         }
     }

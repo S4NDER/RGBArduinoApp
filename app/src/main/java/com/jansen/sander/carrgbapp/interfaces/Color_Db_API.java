@@ -1,9 +1,11 @@
-package com.jansen.sander.carrgbapp;
+package com.jansen.sander.carrgbapp.interfaces;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+
+import com.jansen.sander.carrgbapp.classes.CustomColor;
 
 import java.util.List;
 

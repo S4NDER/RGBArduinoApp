@@ -1,4 +1,4 @@
-package com.jansen.sander.carrgbapp;
+package com.jansen.sander.carrgbapp.classes;
 
 /**
  * Created by Sander on 21/12/2017.
