@@ -142,110 +142,48 @@ public class MainActivity extends AppCompatActivity {
                 fabOFF = findViewById(R.id.fabOFF);
                 fabON = findViewById(R.id.fabON);
 
-                fabBR_UP.setOnClickListener(fabListener);
-                fabBR_DO.setOnClickListener(fabListener);
-                fabOFF.setOnClickListener(fabListener);
-                fabON.setOnClickListener(fabListener);
-
-                fabON.setImageBitmap(textAsBitmap("ON ", 40, Color.WHITE));
-                fabOFF.setImageBitmap(textAsBitmap("OFF", 40, Color.WHITE));
-            }
-        }).start();
-
-        new Thread(new Runnable() {
-            public void run() {
                 fabRED = findViewById(R.id.fabRED);
                 fabGREEN = findViewById(R.id.fabGREEN);
                 fabBLUE = findViewById(R.id.fabBLUE);
                 fabWHITE = findViewById(R.id.fabWHITE);
 
-                fabRED.setOnClickListener(fabListener);
-                fabGREEN.setOnClickListener(fabListener);
-                fabBLUE.setOnClickListener(fabListener);
-                fabWHITE.setOnClickListener(fabListener);
+                fabORANGE = findViewById(R.id.fabORANGE);
+                fabYELLOW = findViewById(R.id.fabYELLOW);
+                fabDARK_YELLOW = findViewById(R.id.fabDARK_YELLOW);
+                fabSTRAW_YELLOW = findViewById(R.id.fabSTRAW_YELLOW);
+
+                fabPEAGREEN = findViewById(R.id.fabPEA_GREEN);
+                fabDARK_BLUE = findViewById(R.id.fabDARK_BLUE);
+                fabCYAN = findViewById(R.id.fabCYAN);
+                fabLIGHT_BLUE = findViewById(R.id.fabLIGHT_BLUE);
+
+                fabDARK_PINK = findViewById(R.id.fabDARK_PINK);
+                fabPINK = findViewById(R.id.fabPINK);
+                fabSKY_BLUE = findViewById(R.id.fabSKY_BLUE);
+                fabPURPLE = findViewById(R.id.fabPURPLE);
+
+                fabFLASH = findViewById(R.id.fabFLASH);
+                fabSTROBE = findViewById(R.id.fabSTROBE);
+                fabFADE = findViewById(R.id.fabFADE);
+                fabSMOOTH = findViewById(R.id.fabSMOOTH);
+                fabColor = findViewById(R.id.fabColor);
 
                 fabRED.setImageBitmap(textAsBitmap("R", 40, Color.WHITE));
                 fabGREEN.setImageBitmap(textAsBitmap("G", 40, Color.WHITE));
                 fabBLUE.setImageBitmap(textAsBitmap("B", 40, Color.WHITE));
                 fabWHITE.setImageBitmap(textAsBitmap("W", 40, Color.BLACK));
-            }
-        }).start();
+                fabON.setImageBitmap(textAsBitmap("ON ", 40, Color.WHITE));
+                fabOFF.setImageBitmap(textAsBitmap("OFF", 40, Color.WHITE));
 
-        new Thread(new Runnable() {
-            public void run() {
-                fabORANGE = findViewById(R.id.fabORANGE);
-                fabPEAGREEN = findViewById(R.id.fabPEA_GREEN);
-                fabDARK_BLUE = findViewById(R.id.fabDARK_BLUE);
-                fabDARK_YELLOW = findViewById(R.id.fabDARK_YELLOW);
+                FloatingActionButton[] fabs = {fabBR_UP, fabBR_DO, fabOFF, fabON, fabRED, fabGREEN,
+                        fabBLUE, fabWHITE,fabORANGE, fabPEAGREEN, fabDARK_BLUE, fabDARK_YELLOW,
+                        fabCYAN, fabDARK_PINK, fabYELLOW, fabLIGHT_BLUE, fabPINK, fabSTRAW_YELLOW,
+                        fabSKY_BLUE, fabPURPLE, fabFLASH, fabSTROBE, fabFADE, fabSMOOTH, fabColor};
 
-                fabORANGE.setOnClickListener(fabListener);
-                fabPEAGREEN.setOnClickListener(fabListener);
-                fabDARK_BLUE.setOnClickListener(fabListener);
-                fabDARK_YELLOW.setOnClickListener(fabListener);
-            }
-        }).start();
-
-        new Thread(new Runnable() {
-            public void run() {
-                fabCYAN = findViewById(R.id.fabCYAN);
-                fabDARK_PINK = findViewById(R.id.fabDARK_PINK);
-                fabYELLOW = findViewById(R.id.fabYELLOW);
-                fabLIGHT_BLUE = findViewById(R.id.fabLIGHT_BLUE);
-
-                fabCYAN.setOnClickListener(fabListener);
-                fabDARK_PINK.setOnClickListener(fabListener);
-                fabYELLOW.setOnClickListener(fabListener);
-                fabLIGHT_BLUE.setOnClickListener(fabListener);
-            }
-        }).start();
-
-        new Thread(new Runnable() {
-            public void run() {
-                fabPINK = findViewById(R.id.fabPINK);
-                fabSTRAW_YELLOW = findViewById(R.id.fabSTRAW_YELLOW);
-                fabSKY_BLUE = findViewById(R.id.fabSKY_BLUE);
-                fabPURPLE = findViewById(R.id.fabPURPLE);
-
-                fabPINK.setOnClickListener(fabListener);
-                fabSTRAW_YELLOW.setOnClickListener(fabListener);
-                fabSKY_BLUE.setOnClickListener(fabListener);
-                fabPURPLE.setOnClickListener(fabListener);
-            }
-        }).start();
-
-        new Thread(new Runnable() {
-            public void run() {
-                fabFLASH = findViewById(R.id.fabFLASH);
-                fabSTROBE = findViewById(R.id.fabSTROBE);
-                fabFADE = findViewById(R.id.fabFADE);
-                fabSMOOTH = findViewById(R.id.fabSMOOTH);
-                fabColor = findViewById(R.id.fabColor);
-
-                fabFLASH.setOnClickListener(fabListener);
-                fabSTROBE.setOnClickListener(fabListener);
-                fabFADE.setOnClickListener(fabListener);
-                fabSMOOTH.setOnClickListener(fabListener);
-
+                for (FloatingActionButton  fabX: fabs ){
+                    fabX.setOnClickListener(fabListener);
+                }
                 fabColor.setOnLongClickListener(longClickListener);
-                fabColor.setOnClickListener(fabListener);
-            }
-        }).start();
-
-        new Thread(new Runnable() {
-            public void run() {
-                fabFLASH = findViewById(R.id.fabFLASH);
-                fabSTROBE = findViewById(R.id.fabSTROBE);
-                fabFADE = findViewById(R.id.fabFADE);
-                fabSMOOTH = findViewById(R.id.fabSMOOTH);
-                fabColor = findViewById(R.id.fabColor);
-
-                fabFLASH.setOnClickListener(fabListener);
-                fabSTROBE.setOnClickListener(fabListener);
-                fabFADE.setOnClickListener(fabListener);
-                fabSMOOTH.setOnClickListener(fabListener);
-
-                fabColor.setOnLongClickListener(longClickListener);
-                fabColor.setOnClickListener(fabListener);
             }
         }).start();
 
