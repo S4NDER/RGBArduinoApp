@@ -25,7 +25,6 @@ import com.jansen.sander.carrgbapp.classes.CustomColorDataAdapter;
 import com.jansen.sander.carrgbapp.classes.SwipeController;
 import com.jansen.sander.carrgbapp.classes.SwipeControllerActions;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +35,6 @@ public class ColorBrowsingActivity extends AppCompatActivity {
     private int cid;
     private CustomColorDataAdapter mAdapter;
     private SwipeController swipeController;
-    private ItemTouchHelper itemTouchHelper;
-    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +71,7 @@ public class ColorBrowsingActivity extends AppCompatActivity {
 
         if (id == R.id.action_drop_database) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Delete all colors?").setPositiveButton("Yes", dialogClickListener)
+            builder.setMessage(R.string.deleteAll).setPositiveButton("Yes", dialogClickListener)
                     .setNegativeButton("No", dialogClickListener).show();
             return true;
         }
@@ -111,7 +108,7 @@ public class ColorBrowsingActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(){
-        recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(mAdapter);
 
@@ -131,7 +128,7 @@ public class ColorBrowsingActivity extends AppCompatActivity {
                 new GetSavedColorByIdTask().execute((Void)null);
             }
         });
-        itemTouchHelper = new ItemTouchHelper(swipeController);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeController);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -180,7 +177,7 @@ public class ColorBrowsingActivity extends AppCompatActivity {
             if (success) {
                 finish();
             } else {
-                mySnackbar.setText("Could not load color").show();
+                mySnackbar.setText(R.string.errorLoad).show();
             }
         }
     }

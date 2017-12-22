@@ -24,9 +24,9 @@ public class CustomColorDataAdapter extends RecyclerView.Adapter<CustomColorData
 
         public CustomColorViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.rgb_color_title);
-            color = (TextView) itemView.findViewById(R.id.custom_red);
-            colorbar =(TextView) itemView.findViewById(R.id.color_bar);
+            title = itemView.findViewById(R.id.rgb_color_title);
+            color = itemView.findViewById(R.id.custom_red);
+            colorbar = itemView.findViewById(R.id.color_bar);
         }
     }
 
@@ -48,7 +48,7 @@ public class CustomColorDataAdapter extends RecyclerView.Adapter<CustomColorData
     @Override
     public void onBindViewHolder(CustomColorViewHolder holder, int position) {
         CustomColor customColor = customColors.get(position);
-        holder.title.setText("RGB Color:");
+        holder.title.setText(R.string.rgbColor);
         holder.color.setText("rgb("+customColor.getRed()+", " +customColor.getGreen()+", "+ customColor.getBlue()+")");
         holder.colorbar.setBackgroundColor(Color.rgb(customColor.getRed(), customColor.getGreen(), customColor.getBlue()));
 

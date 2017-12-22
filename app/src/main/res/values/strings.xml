@@ -92,4 +92,8 @@
     <string name="notPairedConnected">Your device is probably not paired or connected</string>
     <string name="notPairedWrongMac">Your device is not yet paired or the MAC-address is wrong in the settings.</string>
     <string name="longPressToSave">Long press to save custom color</string>
+    <string name="deleteAll">Delete all saved colors?</string>
+    <string name="errorLoad">Could not load color</string>
+    <string name="rgbColor">RGB Color:</string>
+    <string name="rgbValues">rgb(%$d, %$d, %$d)</string>
 </resources>

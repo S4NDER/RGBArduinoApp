@@ -31,7 +31,6 @@ import com.jansen.sander.carrgbapp.R;
 import com.jansen.sander.carrgbapp.classes.CustomColor;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
             fabFLASH, fabSTROBE, fabFADE, fabSMOOTH, fabColor;
 
     private OutputStream outputStream;
-    private InputStream inStream;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -452,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
                                         socket = device.createRfcommSocketToServiceRecord(uuids[0].getUuid());
                                         socket.connect();
                                         outputStream = socket.getOutputStream();
-                                        inStream = socket.getInputStream();
+                                        socket.getInputStream();
                                         connected = true;
                                     } catch (IOException e) {
                                     }
