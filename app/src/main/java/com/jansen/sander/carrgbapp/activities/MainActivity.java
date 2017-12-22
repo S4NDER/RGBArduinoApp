@@ -40,6 +40,7 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
     protected String mac_arduino;
     private static Context mContext;
+    private BluetoothSocket socket = null;
 
     protected static Snackbar mySnackbar;
 
@@ -52,9 +53,10 @@ public class MainActivity extends AppCompatActivity {
     protected int red, green, blue, delay;
     protected String data;
     protected String ir_command="";
-    protected static SeekBar seekRed;
-    protected static SeekBar seekGreen;
-    protected static SeekBar seekBlue;
+    protected SeekBar seekRed;
+    protected SeekBar seekGreen;
+    protected SeekBar seekBlue;
+    static List<SeekBar> sliders = new ArrayList<>();
     private final static int REQUEST_ENABLE_BT = 1;
 
     protected IntentFilter filter = new IntentFilter();
@@ -106,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = this;
-        mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connected", Snackbar.LENGTH_LONG);
+        mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), R.string.connected, Snackbar.LENGTH_LONG);
         View sbView = mySnackbar.getView();
         sbView.setBackgroundColor(Color.parseColor("#3C4149"));
 
@@ -128,6 +130,9 @@ public class MainActivity extends AppCompatActivity {
                 seekRed.setOnSeekBarChangeListener(slideListener);
                 seekGreen.setOnSeekBarChangeListener(slideListener);
                 seekBlue.setOnSeekBarChangeListener(slideListener);
+                sliders.add(seekRed);
+                sliders.add(seekGreen);
+                sliders.add(seekBlue);
             }
         }).start();
 
@@ -283,53 +288,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static List<SeekBar> getSliders(){
-        List<SeekBar> sliders = new ArrayList<SeekBar>();
-        sliders.add(getSlideRed());
-        sliders.add(getSlideGreen());
-        sliders.add(getSlideBlue());
         return sliders;
     }
 
-    public static SeekBar getSlideRed(){
-        return seekRed;
-    }
-
-    public static SeekBar getSlideGreen(){
-        return seekGreen;
-    }
-
-    public static SeekBar getSlideBlue(){
-        return seekBlue;
-    }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-
-            }
-            else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
-            //Device is now connected
-                mySnackbar.setText("Connected").show();
-            }
-            else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-            //Done searching
-            }
-            else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
-           //Device is about to disconnect
+            if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) { //Device is now connected
+                mySnackbar.setText(R.string.connected).show();
             }
             else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
                 connected = false;
-                mySnackbar.setText("Disconnected, reconnecting...").show();
+                mySnackbar.setText(R.string.reconnecting).show();
                 new Thread(new Runnable() {
                     public void run() {
                         try {
                             while (!connected){
                                 if (connected){
-                                    mySnackbar.setText("Reconnected!").show();
+                                    mySnackbar.setText(R.string.connected).show();
                                     break;
                                 } else {
                                     init();
@@ -361,85 +341,32 @@ public class MainActivity extends AppCompatActivity {
     protected FloatingActionButton.OnClickListener fabListener = new FloatingActionButton.OnClickListener(){
         @Override
         public void onClick(View v) {
-            if(v.getId() == findViewById(R.id.fabColor).getId()){
-                if(!fabLongPressed){
-                    mySnackbar.setText("Long press to save custom color").show();
-                } else {
-                    fabLongPressed = false;
-                }
-                return;
-            }
-            if(v.getId() == findViewById(R.id.fabBR_UP).getId()) {
-                ir_command = IR_BRIGHT_UP;
-            }
-            if(v.getId() == findViewById(R.id.fabBR_DO).getId()) {
-                ir_command = IR_BRIGHT_DOWN;
-            }
-            if(v.getId() == findViewById(R.id.fabOFF).getId()) {
-                ir_command = IR_OFF;
-            }
-            if(v.getId() == findViewById(R.id.fabON).getId()) {
-                ir_command = IR_ON;
-            }
-            if(v.getId() == findViewById(R.id.fabRED).getId()) {
-                ir_command = IR_RED;
-            }
-            if(v.getId() == findViewById(R.id.fabGREEN).getId()) {
-                ir_command = IR_GREEN;
-            }
-            if(v.getId() == findViewById(R.id.fabBLUE).getId()) {
-                ir_command = IR_BLUE;
-            }
-            if(v.getId() == findViewById(R.id.fabWHITE).getId()) {
-                ir_command = IR_WHITE;
-            }
-            if(v.getId() == findViewById(R.id.fabORANGE).getId()) {
-                ir_command = IR_ORANGE;
-            }
-            if(v.getId() == findViewById(R.id.fabDARK_YELLOW).getId()) {
-                ir_command = IR_DARK_YELLOW;
-            }
-            if(v.getId() == findViewById(R.id.fabYELLOW).getId()) {
-                ir_command = IR_YELLOW;
-            }
-            if(v.getId() == findViewById(R.id.fabSTRAW_YELLOW).getId()) {
-                ir_command = IR_STRAW_YELLOW;
-            }
-            if(v.getId() == findViewById(R.id.fabPEA_GREEN).getId()) {
-                ir_command = IR_PEA_GREEN;
-            }
-            if(v.getId() == findViewById(R.id.fabCYAN).getId()) {
-                ir_command = IR_CYAN;
-            }
-            if(v.getId() == findViewById(R.id.fabLIGHT_BLUE).getId()) {
-                ir_command = IR_LIGHT_BLUE;
-            }
-            if(v.getId() == findViewById(R.id.fabSKY_BLUE).getId()) {
-                ir_command = IR_SKY_BLUE;
-            }
-            if(v.getId() == findViewById(R.id.fabDARK_BLUE).getId()) {
-                ir_command = IR_DARK_BLUE;
-            }
-            if(v.getId() == findViewById(R.id.fabPINK).getId()) {
-                ir_command = IR_PINK;
-            }
-            if(v.getId() == findViewById(R.id.fabDARK_PINK).getId()) {
-                ir_command = IR_DARK_PINK;
-            }
-            if(v.getId() == findViewById(R.id.fabPURPLE).getId()) {
-                ir_command = IR_PURPLE;
-            }
-            if(v.getId() == findViewById(R.id.fabFLASH).getId()) {
-                ir_command = IR_FLASH;
-            }
-            if(v.getId() == findViewById(R.id.fabSTROBE).getId()) {
-                ir_command = IR_STROBE;
-            }
-            if(v.getId() == findViewById(R.id.fabFADE).getId()) {
-                ir_command = IR_FADE;
-            }
-            if(v.getId() == findViewById(R.id.fabSMOOTH).getId()) {
-                ir_command = IR_SMOOTH;
+            switch (v.getId()){
+                case R.id.fabColor:if(!fabLongPressed){mySnackbar.setText(R.string.longPressToSave).show();} else {fabLongPressed = false;}return;
+                case R.id.fabBR_UP : ir_command = IR_BRIGHT_UP; break;
+                case R.id.fabBR_DO: ir_command = IR_BRIGHT_DOWN; break;
+                case R.id.fabOFF: ir_command = IR_OFF; break;
+                case R.id.fabON: ir_command = IR_ON; break;
+                case R.id.fabRED: ir_command = IR_RED; break;
+                case R.id.fabGREEN: ir_command = IR_GREEN; break;
+                case R.id.fabBLUE: ir_command = IR_BLUE; break;
+                case R.id.fabWHITE: ir_command = IR_WHITE; break;
+                case R.id.fabORANGE: ir_command = IR_ORANGE; break;
+                case R.id.fabDARK_YELLOW: ir_command = IR_DARK_YELLOW; break;
+                case R.id.fabYELLOW: ir_command = IR_YELLOW; break;
+                case R.id.fabSTRAW_YELLOW: ir_command = IR_STRAW_YELLOW; break;
+                case R.id.fabPEA_GREEN: ir_command = IR_PEA_GREEN; break;
+                case R.id.fabCYAN: ir_command = IR_CYAN; break;
+                case R.id.fabLIGHT_BLUE: ir_command = IR_LIGHT_BLUE; break;
+                case R.id.fabSKY_BLUE: ir_command = IR_SKY_BLUE; break;
+                case R.id.fabDARK_BLUE: ir_command = IR_DARK_BLUE; break;
+                case R.id.fabPINK: ir_command = IR_PINK; break;
+                case R.id.fabDARK_PINK: ir_command = IR_DARK_PINK; break;
+                case R.id.fabPURPLE: ir_command = IR_PURPLE; break;
+                case R.id.fabFLASH: ir_command = IR_FLASH; break;
+                case R.id.fabSTROBE: ir_command = IR_STROBE; break;
+                case R.id.fabFADE: ir_command = IR_FADE; break;
+                case R.id.fabSMOOTH: ir_command = IR_SMOOTH; break;
             }
             try {
                 send_data(IR_VALUE);
@@ -496,8 +423,15 @@ public class MainActivity extends AppCompatActivity {
     private void init() throws IOException {
         new Thread(new Runnable() {
             public void run() {
+                if(socket != null){
+                    try {
+                        socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 Snackbar mySnackbar;
-                mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "Connected", Snackbar.LENGTH_LONG);
+                mySnackbar = Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), R.string.connected, Snackbar.LENGTH_LONG);
                 View sbView = mySnackbar.getView();
                 sbView.setBackgroundColor(Color.parseColor("#3C4149"));
 
@@ -510,21 +444,17 @@ public class MainActivity extends AppCompatActivity {
                         if (pairedDevices.size() > 0) {
                             // There are paired devices. Get the name and address of each paired device.
                             for (BluetoothDevice device : pairedDevices) {
-                                String deviceName = device.getName();
                                 String deviceHardwareAddress = device.getAddress(); // MAC address
-                                Log.e("mac", deviceHardwareAddress);
                                 if(deviceHardwareAddress.equalsIgnoreCase(mac_arduino)){
-                                    Log.e("Bluetooth:", "Should be connected");
                                     ParcelUuid[] uuids = device.getUuids();
-                                    BluetoothSocket socket = null;
                                     try {
+                                        socket = null;
                                         socket = device.createRfcommSocketToServiceRecord(uuids[0].getUuid());
                                         socket.connect();
                                         outputStream = socket.getOutputStream();
                                         inStream = socket.getInputStream();
                                         connected = true;
                                     } catch (IOException e) {
-                                        e.printStackTrace();
                                     }
                                     isPaired = true;
                                     break;
@@ -532,13 +462,11 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                         if(!isPaired){
-                            mySnackbar.setText("Your device is not yet paired or the MAC-address is wrong in the settings.").show();
-                            Log.e("error", "No appropriate paired devices.");
+                            mySnackbar.setText(R.string.notPairedWrongMac).show();
                         }
                     } else {
                         Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                         startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-                        Log.e("error", "Bluetooth is disabled.");
                     }
                 }
 
@@ -552,26 +480,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.v("Data", data);
                 outputStream.write(s.getBytes());
             } else{
-                mySnackbar.setText("Your device is probably not paired or connected").show();
+                mySnackbar.setText(R.string.notPairedConnected).show();
+                if (socket != null){socket.close();}
                 init();
             }
         } catch (Exception e){
-
-        }
-    }
-
-    public void run() {
-        final int BUFFER_SIZE = 1024;
-        byte[] buffer = new byte[BUFFER_SIZE];
-        int bytes = 0;
-        int b = BUFFER_SIZE;
-
-        while (true) {
-            try {
-                bytes = inStream.read(buffer, bytes, BUFFER_SIZE - bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            if (socket != null){socket.close();}
         }
     }
 
@@ -616,15 +530,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_reconnect) {
-            if (!connected){
-                try {
-                    mySnackbar.setText("Reconnecting...").show();
-                    init();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                mySnackbar.setText("You should be still connected").show();
+            mySnackbar.setText(R.string.reconnecting).show();
+            try {
+                init();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             return true;
         }
@@ -640,7 +550,7 @@ public class MainActivity extends AppCompatActivity {
             new SaveNewColorTask(new CustomColor(red, green, blue)).execute((Void)null);
             return true;
         } catch (Exception e){
-            mySnackbar.setText("Could not save color").show();
+            mySnackbar.setText(R.string.errorSave).show();
         }
         return false;
     }
@@ -661,9 +571,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
-                mySnackbar.setText("Saved!").show();
+                mySnackbar.setText(R.string.saved).show();
             } else {
-                mySnackbar.setText("Could not save color").show();
+                mySnackbar.setText(R.string.errorSave).show();
             }
         }
     }

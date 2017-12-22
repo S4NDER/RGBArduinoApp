@@ -84,4 +84,12 @@
     <string name="title_activity_color_browsing">ColorBrowsingActivity</string>
     <string name="action_load_saved_colors">Load saved colors</string>
     <string name="action_remove_all">Delete all</string>
+    <string name="errorSave">Could not save color</string>
+    <string name="connected">Connected</string>
+    <string name="reconnecting">Reconnecting...</string>
+    <string name="saved">Saved!</string>
+    <string name="shoulbBeConnected">You still should connected</string>
+    <string name="notPairedConnected">Your device is probably not paired or connected</string>
+    <string name="notPairedWrongMac">Your device is not yet paired or the MAC-address is wrong in the settings.</string>
+    <string name="longPressToSave">Long press to save custom color</string>
 </resources>
