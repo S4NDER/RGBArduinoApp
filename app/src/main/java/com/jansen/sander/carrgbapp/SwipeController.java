@@ -1,17 +1,24 @@
 package com.jansen.sander.carrgbapp;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
+import android.support.annotation.DrawableRes;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper.Callback;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.*;
 
@@ -32,7 +39,7 @@ class SwipeController extends Callback {
     private RectF buttonInstance = null;
     private RecyclerView.ViewHolder currentItemViewHolder = null;
     private SwipeControllerActions buttonsActions = null;
-    private static final float buttonWidth = 300;
+    private static final float buttonWidth = 200;
 
     public SwipeController(SwipeControllerActions buttonsActions) {
         this.buttonsActions = buttonsActions;
@@ -158,22 +165,29 @@ class SwipeController extends Callback {
 
         View itemView = viewHolder.itemView;
         Paint p = new Paint();
+        Context mContext = MainActivity.getContext();
+
 
         RectF leftButton = new RectF(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + buttonWidthWithoutPadding, itemView.getBottom());
-        p.setColor(Color.BLUE);
+        p.setColor(Color.rgb(34,139,34));
         c.drawRoundRect(leftButton, corners, corners, p);
-        drawText("Load", c, leftButton, p);
+        Bitmap bmpLeft = getBitmapFromDrawable(mContext, R.drawable.ic_reply_black_24dp);
+        float spaceHeightLeft = 0; // change this to whatever looks good to you
+        float combinedHeightLeft = bmpLeft.getHeight() + spaceHeightLeft + leftButton.height();
+        c.drawBitmap(bmpLeft, leftButton.centerX() - (bmpLeft.getWidth() / 2), leftButton.centerY() - (combinedHeightLeft / 6), null);
 
         RectF rightButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-        p.setColor(Color.RED);
+        p.setColor(Color.rgb(255,140,0));
 
         //Bitmap bmp = MainActivity.getTrashCan();
 
-        Bitmap bmp =BitmapFactory.decodeResource(MainActivity.getContext().getResources(), R.drawable.ic_delete_black_24dp);
-        c.drawBitmap(bmp, 0, 0, p);
 
         c.drawRoundRect(rightButton, corners, corners, p);
-        drawText("Delete", c, rightButton, p);
+        Bitmap bmpRight = getBitmapFromDrawable(mContext, R.drawable.ic_delete_black_24dp);
+        float spaceHeightRight = 0; // change this to whatever looks good to you
+        float combinedHeightRight = bmpRight.getHeight() + spaceHeightRight + rightButton.height();
+        c.drawBitmap(bmpRight, rightButton.centerX() - (bmpRight.getWidth() / 2), rightButton.centerY() - (combinedHeightRight / 6), null);
+        //drawText("Delete", c, rightButton, p);
 
         buttonInstance = null;
         if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
@@ -183,9 +197,26 @@ class SwipeController extends Callback {
         }
     }
 
+    public static Bitmap getBitmapFromDrawable(Context context, @DrawableRes int drawableId) {
+        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
+
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        } else if (drawable instanceof VectorDrawableCompat || drawable instanceof VectorDrawable) {
+            Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+
+            return bitmap;
+        } else {
+            throw new IllegalArgumentException("unsupported drawable type");
+        }
+    }
+
     private void drawText(String text, Canvas c, RectF button, Paint p) {
         float textSize = 60;
-        p.setColor(Color.WHITE);
+        p.setColor(Color.BLACK);
         p.setAntiAlias(true);
         p.setTextSize(textSize);
 
