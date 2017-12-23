@@ -322,9 +322,8 @@ public class MainActivity extends AppCompatActivity {
             blue = ((SeekBar) findViewById(R.id.slideBlue)).getProgress();
             fabColor.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(red,green,blue)));
 
-            if ((!fromUser) && (ColorBrowsingActivity.doneLoading)){
+            if ((!fromUser)){
                 try {
-                    ColorBrowsingActivity.doneLoading = false;
                     send_data(COLOR);
                 } catch (IOException e) {
                     e.printStackTrace();

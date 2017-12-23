@@ -31,11 +31,11 @@ import java.util.List;
 
 public class ColorBrowsingActivity extends AppCompatActivity {
 
-    protected static boolean doneLoading = false;
     private Snackbar mySnackbar;
     private int cid;
     private CustomColorDataAdapter mAdapter;
     private SwipeController swipeController;
+    ArrayList<SeekBar> sliders;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,7 @@ public class ColorBrowsingActivity extends AppCompatActivity {
         mySnackbar = MainActivity.mySnackbar;
         View sbView = mySnackbar.getView();
         sbView.setBackgroundColor(Color.parseColor("#3C4149"));
+        sliders = (ArrayList<SeekBar>) MainActivity.getSliders();
 
         getAllSavedColors();
     }
@@ -163,21 +164,18 @@ public class ColorBrowsingActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... voids) {
             List<CustomColor> colorByCid = AppDatabase.getInstance(getApplicationContext()).color_db_api().colorByCid(cid);
-            ArrayList<SeekBar> sliders = (ArrayList<SeekBar>) MainActivity.getSliders();
             for (CustomColor colorX : colorByCid){
                 Log.v("Color", "RGB: " + colorX.getRed() + ", " + colorX.getGreen() + ", " +  colorX.getBlue() + "   id: " + colorX.getCid());
                 sliders.get(0).setProgress(colorX.getRed());
                 sliders.get(1).setProgress(colorX.getGreen());
                 sliders.get(2).setProgress(colorX.getBlue());
             }
-            //
             return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
-                doneLoading = true;
                 finish();
             } else {
                 mySnackbar.setText(R.string.errorLoad).show();
