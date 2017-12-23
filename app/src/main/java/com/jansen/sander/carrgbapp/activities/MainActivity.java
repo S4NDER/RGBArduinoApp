@@ -323,7 +323,6 @@ public class MainActivity extends AppCompatActivity {
             fabColor.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(red,green,blue)));
 
             if ((!fromUser) && (ColorBrowsingActivity.doneLoading)){
-                Log.e("Done loading",""+ColorBrowsingActivity.doneLoading);
                 try {
                     ColorBrowsingActivity.doneLoading = false;
                     send_data(COLOR);
