@@ -47,9 +47,12 @@ public class MainActivity extends AppCompatActivity {
     protected boolean connected = false;
     protected boolean fabLongPressed = false;
 
+    protected Boolean beatsEnabled = false;
+
     protected final int COLOR = 0;
     protected final int COLOR_DELAY = 1;
     protected final int IR_VALUE = 2;
+    protected final int BEATS = 3;
     protected int red, green, blue, delay;
     protected String data;
     protected String ir_command="";
@@ -98,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             fabDARK_YELLOW, fabCYAN, fabDARK_PINK,
             fabYELLOW, fabLIGHT_BLUE, fabPINK,
             fabSTRAW_YELLOW, fabSKY_BLUE, fabPURPLE,
-            fabFLASH, fabSTROBE, fabFADE, fabSMOOTH, fabColor;
+            fabFLASH, fabSTROBE, fabFADE, fabSMOOTH, fabColor, fabBeats;
 
     private OutputStream outputStream;
 
@@ -175,10 +178,12 @@ public class MainActivity extends AppCompatActivity {
                 fabON.setImageBitmap(textAsBitmap("ON ", 40, Color.WHITE));
                 fabOFF.setImageBitmap(textAsBitmap("OFF", 40, Color.WHITE));
 
+                fabBeats = findViewById(R.id.fabBeat);
+
                 FloatingActionButton[] fabs = {fabBR_UP, fabBR_DO, fabOFF, fabON, fabRED, fabGREEN,
                         fabBLUE, fabWHITE,fabORANGE, fabPEAGREEN, fabDARK_BLUE, fabDARK_YELLOW,
                         fabCYAN, fabDARK_PINK, fabYELLOW, fabLIGHT_BLUE, fabPINK, fabSTRAW_YELLOW,
-                        fabSKY_BLUE, fabPURPLE, fabFLASH, fabSTROBE, fabFADE, fabSMOOTH, fabColor};
+                        fabSKY_BLUE, fabPURPLE, fabFLASH, fabSTROBE, fabFADE, fabSMOOTH, fabColor, fabBeats};
 
                 for (FloatingActionButton  fabX: fabs ){
                     fabX.setOnClickListener(fabListener);
@@ -278,6 +283,7 @@ public class MainActivity extends AppCompatActivity {
     protected FloatingActionButton.OnClickListener fabListener = new FloatingActionButton.OnClickListener(){
         @Override
         public void onClick(View v) {
+            int type = IR_VALUE;
             switch (v.getId()){
                 case R.id.fabColor:if(!fabLongPressed){mySnackbar.setText(R.string.longPressToSave).show();} else {fabLongPressed = false;}return;
                 case R.id.fabBR_UP : ir_command = IR_BRIGHT_UP; break;
@@ -304,9 +310,14 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.fabSTROBE: ir_command = IR_STROBE; break;
                 case R.id.fabFADE: ir_command = IR_FADE; break;
                 case R.id.fabSMOOTH: ir_command = IR_SMOOTH; break;
+                case R.id.fabBeat : beatsEnabled = !beatsEnabled; type = BEATS; break;
             }
             try {
-                send_data(IR_VALUE);
+                if (type == BEATS){
+                    send_data(BEATS);
+                } else {
+                    send_data(IR_VALUE);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -354,6 +365,7 @@ public class MainActivity extends AppCompatActivity {
             case COLOR: data = "{\"red\":" + red + ",\"green\":" + green + ",\"blue\":" + blue + "}"; break;
             case COLOR_DELAY: data = "{\"red\":" + red + ",\"green\":" + green + ",\"blue\":" + blue + ",\"delay\":" + delay +"}"; break;
             case IR_VALUE: data = "{\"ir_val\":"+ ir_command +"}";break;
+            case BEATS : data = "{\"beats\":"+ beatsEnabled +"}"; break;
         }
         write(data);
     }
