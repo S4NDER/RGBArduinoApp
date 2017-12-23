@@ -31,6 +31,7 @@ import java.util.List;
 
 public class ColorBrowsingActivity extends AppCompatActivity {
 
+    protected static boolean doneLoading = false;
     private Snackbar mySnackbar;
     private int cid;
     private CustomColorDataAdapter mAdapter;
@@ -169,12 +170,14 @@ public class ColorBrowsingActivity extends AppCompatActivity {
                 sliders.get(1).setProgress(colorX.getGreen());
                 sliders.get(2).setProgress(colorX.getBlue());
             }
+            //
             return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
+                doneLoading = true;
                 finish();
             } else {
                 mySnackbar.setText(R.string.errorLoad).show();
