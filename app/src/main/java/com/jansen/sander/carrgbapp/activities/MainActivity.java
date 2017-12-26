@@ -58,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
     protected final int DELAY = 1;
     protected final int IR_VALUE = 2;
     protected final int BEATS = 3;
-    protected int red, green, blue, delay;
+    protected int red, green, blue;
+    protected int delay = 10;
     protected String data;
     protected String ir_command="";
     protected SeekBar seekRed;
@@ -343,6 +344,7 @@ public class MainActivity extends AppCompatActivity {
         final NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.dialog_number_picker);
         numberPicker.setMaxValue(65535);
         numberPicker.setMinValue(10);
+        numberPicker.setValue(delay);
         numberPicker.setWrapSelectorWheel(false);
         numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
