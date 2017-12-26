@@ -215,19 +215,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mac_arduino  = sharedPref.getString(SettingsActivity.MAC_ARDUINO, "98:D3:32:11:02:9D");
         showHiddenFeatures = sharedPref.getBoolean(SettingsActivity.ENABLE_HIDDEN_FEATURES, false);
-        Log.e("bool", ""+showHiddenFeatures);
         fabBeats = findViewById(R.id.fabBeat);
         if (showHiddenFeatures){
             fabBeats.show();
         } else {
             fabBeats.hide();
         }
-
-
     }
 
     @Override
@@ -292,8 +288,6 @@ public class MainActivity extends AppCompatActivity {
     };
 
     protected  FloatingActionButton.OnLongClickListener longClickListener = new FloatingActionButton.OnLongClickListener(){
-
-
         @Override
         public boolean onLongClick(View v) {
             if (v.getId() == findViewById(R.id.fabColor).getId()){
