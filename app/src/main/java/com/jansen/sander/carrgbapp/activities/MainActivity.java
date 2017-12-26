@@ -1,10 +1,13 @@
 package com.jansen.sander.carrgbapp.activities;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -21,15 +24,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.SeekBar;
 
 import com.jansen.sander.carrgbapp.AppDatabase;
 import com.jansen.sander.carrgbapp.R;
 import com.jansen.sander.carrgbapp.classes.CustomColor;
-import com.jansen.sander.carrgbapp.classes.CustomColorDataAdapter;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -50,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     protected Boolean beatsEnabled = false;
 
     protected final int COLOR = 0;
-    protected final int COLOR_DELAY = 1;
+    protected final int DELAY = 1;
     protected final int IR_VALUE = 2;
     protected final int BEATS = 3;
     protected int red, green, blue, delay;
@@ -101,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             fabDARK_YELLOW, fabCYAN, fabDARK_PINK,
             fabYELLOW, fabLIGHT_BLUE, fabPINK,
             fabSTRAW_YELLOW, fabSKY_BLUE, fabPURPLE,
-            fabFLASH, fabSTROBE, fabFADE, fabSMOOTH, fabColor, fabBeats;
+            fabFLASH, fabSTROBE, fabFADE, fabSMOOTH, fabColor, fabBeats, fabDelay;
 
     private OutputStream outputStream;
 
@@ -170,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 fabFADE = findViewById(R.id.fabFADE);
                 fabSMOOTH = findViewById(R.id.fabSMOOTH);
                 fabColor = findViewById(R.id.fabColor);
+                fabDelay = findViewById(R.id.fabDelay);
 
                 fabRED.setImageBitmap(textAsBitmap("R", 40, Color.WHITE));
                 fabGREEN.setImageBitmap(textAsBitmap("G", 40, Color.WHITE));
@@ -183,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 FloatingActionButton[] fabs = {fabBR_UP, fabBR_DO, fabOFF, fabON, fabRED, fabGREEN,
                         fabBLUE, fabWHITE,fabORANGE, fabPEAGREEN, fabDARK_BLUE, fabDARK_YELLOW,
                         fabCYAN, fabDARK_PINK, fabYELLOW, fabLIGHT_BLUE, fabPINK, fabSTRAW_YELLOW,
-                        fabSKY_BLUE, fabPURPLE, fabFLASH, fabSTROBE, fabFADE, fabSMOOTH, fabColor, fabBeats};
+                        fabSKY_BLUE, fabPURPLE, fabFLASH, fabSTROBE, fabFADE, fabSMOOTH, fabColor, fabBeats, fabDelay};
 
                 for (FloatingActionButton  fabX: fabs ){
                     fabX.setOnClickListener(fabListener);
@@ -311,11 +317,14 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.fabFADE: ir_command = IR_FADE; break;
                 case R.id.fabSMOOTH: ir_command = IR_SMOOTH; break;
                 case R.id.fabBeat : beatsEnabled = !beatsEnabled; type = BEATS; break;
+                case R.id.fabDelay: showNumberPicker(); type = DELAY;  break;
             }
             try {
-                if (type == BEATS){
+                if (type == DELAY){
+
+                } else if (type == BEATS){
                     send_data(BEATS);
-                } else {
+                } else{
                     send_data(IR_VALUE);
                 }
             } catch (IOException e) {
@@ -324,6 +333,43 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    protected void showNumberPicker(){
+        final AlertDialog.Builder d = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.number_picker_dialog, null);
+        d.setTitle("Effect delay");
+        d.setMessage("Try to stay under 500 ms");
+        d.setView(dialogView);
+        final NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.dialog_number_picker);
+        numberPicker.setMaxValue(65535);
+        numberPicker.setMinValue(10);
+        numberPicker.setWrapSelectorWheel(false);
+        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                Log.d("lol", "onValueChange: ");
+            }
+        });
+        d.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.d("lol", "onClick: " + numberPicker.getValue());
+                delay = numberPicker.getValue();
+                try {
+                    send_data(DELAY);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        d.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        AlertDialog alertDialog = d.create();
+        alertDialog.show();
+    }
 
     protected SeekBar.OnSeekBarChangeListener slideListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
@@ -363,7 +409,7 @@ public class MainActivity extends AppCompatActivity {
     protected void send_data(int type) throws IOException {
         switch (type){
             case COLOR: data = "{\"red\":" + red + ",\"green\":" + green + ",\"blue\":" + blue + "}"; break;
-            case COLOR_DELAY: data = "{\"red\":" + red + ",\"green\":" + green + ",\"blue\":" + blue + ",\"delay\":" + delay +"}"; break;
+            case DELAY: data = "{\"delay\":" + delay +"}"; break;
             case IR_VALUE: data = "{\"ir_val\":"+ ir_command +"}";break;
             case BEATS : data = "{\"beats\":"+ beatsEnabled +"}"; break;
         }
