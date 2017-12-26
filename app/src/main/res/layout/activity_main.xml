@@ -412,8 +412,9 @@
         android:layout_marginTop="8dp"
         android:clickable="true"
         android:focusable="true"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fabColor"
+        app:layout_constraintTop_toBottomOf="@+id/fabDelay"
         app:srcCompat="@android:drawable/presence_audio_away" />
 
     <android.support.design.widget.FloatingActionButton
@@ -425,7 +426,7 @@
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fabBeat"
+        app:layout_constraintTop_toBottomOf="@+id/fabColor"
         app:srcCompat="@android:drawable/ic_menu_recent_history" />
 
 </android.support.constraint.ConstraintLayout>

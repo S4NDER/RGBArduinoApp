@@ -97,4 +97,6 @@
     <string name="rgbColor">RGB Color:</string>
     <string name="rgbValues">rgb(%$d, %$d, %$d)</string>
     <string name="duplicate">You have this color already</string>
+    <string name="pref_title_features">Features</string>
+    <string name="pref_enable_hidden_features">Enable hidden features</string>
 </resources>

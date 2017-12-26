@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     protected boolean fabLongPressed = false;
 
     protected Boolean beatsEnabled = false;
+    private Boolean showHiddenFeatures = false;
 
     protected final int COLOR = 0;
     protected final int DELAY = 1;
@@ -122,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mac_arduino  = sharedPref.getString(SettingsActivity.MAC_ARDUINO, "98:D3:32:11:02:9D");
+        showHiddenFeatures = sharedPref.getBoolean(SettingsActivity.ENABLE_HIDDEN_FEATURES, false);
 
         try {
             init();
@@ -186,6 +188,11 @@ public class MainActivity extends AppCompatActivity {
                 fabOFF.setImageBitmap(textAsBitmap("OFF", 40, Color.WHITE));
 
                 fabBeats = findViewById(R.id.fabBeat);
+                if (showHiddenFeatures){
+                    fabBeats.show();
+                } else {
+                    fabBeats.hide();
+                }
 
                 FloatingActionButton[] fabs = {fabBR_UP, fabBR_DO, fabOFF, fabON, fabRED, fabGREEN,
                         fabBLUE, fabWHITE,fabORANGE, fabPEAGREEN, fabDARK_BLUE, fabDARK_YELLOW,
@@ -211,6 +218,16 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mac_arduino  = sharedPref.getString(SettingsActivity.MAC_ARDUINO, "98:D3:32:11:02:9D");
+        showHiddenFeatures = sharedPref.getBoolean(SettingsActivity.ENABLE_HIDDEN_FEATURES, false);
+        Log.e("bool", ""+showHiddenFeatures);
+        fabBeats = findViewById(R.id.fabBeat);
+        if (showHiddenFeatures){
+            fabBeats.show();
+        } else {
+            fabBeats.hide();
+        }
+
+
     }
 
     @Override

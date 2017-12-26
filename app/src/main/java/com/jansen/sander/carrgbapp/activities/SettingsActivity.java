@@ -12,9 +12,11 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.Switch;
 
 import com.jansen.sander.carrgbapp.AppCompatPreferenceActivity;
 import com.jansen.sander.carrgbapp.R;
@@ -33,6 +35,7 @@ import com.jansen.sander.carrgbapp.R;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
     public static final String MAC_ARDUINO = "pref_mac_arduino";
+    public static final String ENABLE_HIDDEN_FEATURES = "enable_hidden_features";
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -86,12 +89,22 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
-        // Trigger the listener immediately with the preference's
-        // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+        if (preference instanceof SwitchPreference)
+        {
+            // Trigger the listener immediately with the preference's
+            // current value.
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(
+                    preference,
+                    PreferenceManager.getDefaultSharedPreferences(
+                            preference.getContext()).getBoolean(preference.getKey(),false));
+        } else {
+            // Trigger the listener immediately with the preference's
+            // current value.
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                    PreferenceManager
+                            .getDefaultSharedPreferences(preference.getContext())
+                            .getString(preference.getKey(), ""));
+        }
     }
 
     @Override
@@ -158,7 +171,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("pref_mac_arduino"));
+            bindPreferenceSummaryToValue(findPreference(MAC_ARDUINO));
+            bindPreferenceSummaryToValue(findPreference(ENABLE_HIDDEN_FEATURES));
         }
 
         @Override
